@@ -1,13 +1,17 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
+import React from "react";
+import ReactDOM from "react-dom";
+import Welcome from "./welcome";
+import Logo from "./logo";
 
-ReactDOM.render(
-    <HelloWorld />,
-    document.querySelector('main')
-);
+let component;
 
-function HelloWorld() {
-    return (
-        <div>Hello, World!</div>
-    );
+if (location.pathname == "/welcome") {
+    // render welcome screen with registration/login
+    component = <Welcome />;
+} else if (location.pathname == "/") {
+    // render logged-in section
+    component = <Logo />;
 }
+
+// ReactDOM.render should only be called once in all of the code
+ReactDOM.render(component, document.querySelector("main"));
