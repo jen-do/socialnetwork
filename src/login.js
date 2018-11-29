@@ -2,7 +2,7 @@ import React from "react";
 import axios from "./axios";
 import { Link } from "react-router-dom";
 
-export default class Registration extends React.Component {
+export default class Login extends React.Component {
     constructor() {
         super();
         this.state = {};
@@ -10,8 +10,6 @@ export default class Registration extends React.Component {
         this.handleSubmit = this.handleSubmit.bind(this);
     }
 
-    // getting user's input from the registration input fields and storing it in state (via setState method)
-    // note: setState is async, so here a callback is needed for consolelogging this.state
     handleChange(e) {
         console.log("handlechange running!", e.target.name);
         this.setState(
@@ -22,14 +20,11 @@ export default class Registration extends React.Component {
         );
     }
 
-    // prevent the form's default behaviour and instead write a POST request to  pass the user input (this.state) to the server
     handleSubmit(e) {
         e.preventDefault();
-        // console.log(this.state);
         axios
-            .post("/registration", this.state)
+            .post("/login", this.state)
             .then(resp => {
-                // console.log("resp in then of POST /registration: ", resp);
                 if (resp.data.success) {
                     location.replace("/");
                 } else {
@@ -39,7 +34,7 @@ export default class Registration extends React.Component {
                 }
             })
             .catch(err => {
-                console.log("error in axios POST /registration: ", err);
+                console.log("error in axios POST /login: ", err);
                 this.setState({
                     error: true
                 });
@@ -48,26 +43,14 @@ export default class Registration extends React.Component {
 
     render() {
         return (
-            <div className="registration-container">
-                <h2>Register here!</h2>
+            <div className="login-container">
+                <h2>Login</h2>
                 {this.state.error && (
                     <div className="error-message">
                         Something went wrong. Please try again.
                     </div>
                 )}
                 <form onSubmit={this.handleSubmit}>
-                    <input
-                        onChange={this.handleChange}
-                        name="first"
-                        type="text"
-                        placeholder="first name"
-                    />
-                    <input
-                        onChange={this.handleChange}
-                        name="last"
-                        type="text"
-                        placeholder="last name"
-                    />
                     <input
                         onChange={this.handleChange}
                         name="email"
@@ -80,9 +63,9 @@ export default class Registration extends React.Component {
                         type="password"
                         placeholder="password"
                     />
-                    <button>register</button>
+                    <button>login</button>
                 </form>
-                <Link to="/login">Already got an account? Login here.</Link>
+                <Link to="/">Got no account yet? Register here!</Link>
             </div>
         );
     }

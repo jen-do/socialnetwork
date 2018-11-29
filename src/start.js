@@ -6,7 +6,7 @@ import Logo from "./logo";
 let component;
 
 if (location.pathname == "/welcome") {
-    // render welcome screen with registration/login
+    // render welcome screen with registration OR login
     component = <Welcome />;
 } else if (location.pathname == "/") {
     // render logged-in section
