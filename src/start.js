@@ -1,7 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import Welcome from "./welcome";
-import Logo from "./logo";
+import App from "./app";
 
 let component;
 
@@ -10,7 +10,7 @@ if (location.pathname == "/welcome") {
     component = <Welcome />;
 } else if (location.pathname == "/") {
     // render logged-in section
-    component = <Logo />;
+    component = <App />;
 }
 
 // ReactDOM.render should only be called once in all of the code

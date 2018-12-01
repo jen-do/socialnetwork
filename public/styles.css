@@ -56,7 +56,9 @@ button {
     font-weight: bold;
 }
 
-#logo {
+#logo,
+#profile-pic {
     width: 100px;
     padding: 10px;
+    cursor: pointer;
 }

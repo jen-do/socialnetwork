@@ -3,9 +3,13 @@ const app = express();
 const compression = require("compression");
 const bcrypt = require("./bcrypt");
 const csurf = require("csurf");
+const multer = require("multer");
+const uidSafe = require("uid-safe");
+const path = require("path");
 const db = require("./db");
 
 app.use(express.static("./public"));
+app.use(express.static("./uploads"));
 const cookieSession = require("cookie-session");
 const bodyparser = require("body-parser");
 app.use(bodyparser.json());
@@ -15,6 +19,26 @@ app.use(
         maxAge: 1000 * 60 * 60 * 24 * 14
     })
 );
+
+// boilerplate for file upload
+var diskStorage = multer.diskStorage({
+    destination: function(req, file, callback) {
+        callback(null, __dirname + "/uploads");
+    },
+    filename: function(req, file, callback) {
+        uidSafe(24).then(function(uid) {
+            callback(null, uid + path.extname(file.originalname));
+        });
+    }
+});
+
+var uploader = multer({
+    storage: diskStorage,
+    limits: {
+        fileSize: 2097152
+    }
+});
+// end boilerplate file upload
 
 // csurf comes after bodyPrser and cookieSession
 app.use(csurf());
@@ -99,6 +123,35 @@ app.post("/login", (req, res) => {
         })
         .catch(err => {
             console.log("error in POST /login: ", err);
+            res.json({
+                success: false
+            });
+        });
+});
+
+app.get("/user", (req, res) => {
+    db.getUserInfo(req.session.id)
+        .then(results => {
+            // console.log("results in getUserinfo: ", results);
+            res.json(results[0]);
+        })
+        .catch(err => {
+            console.log("error in GET /user serverside: ", err);
+        });
+});
+
+app.post("/upload", uploader.single("file"), (req, res) => {
+    console.log("req.file in POST /upload", req.file, req.body);
+    db.uploadProfilePic(req.session.id, "/" + req.file.filename)
+        .then(results => {
+            console.log(results[0].url);
+            res.json({
+                newProfilePicUrl: results[0].url,
+                success: true
+            });
+        })
+        .catch(err => {
+            console.log("error in POST /uploads if statement: ", err);
             res.json({
                 success: false
             });

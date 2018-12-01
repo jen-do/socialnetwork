@@ -5,5 +5,6 @@ CREATE TABLE users (
     first VARCHAR(50) NOT NULL,
     last VARCHAR(50) NOT NULL,
     email VARCHAR(200) NOT NULL UNIQUE CHECK (email <>''),
+    profilePicUrl VARCHAR(300),
     pass VARCHAR(200) NOT NULL
 );

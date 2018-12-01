@@ -31,3 +31,29 @@ exports.login = function(email) {
             return results.rows;
         });
 };
+
+exports.getUserInfo = function(id) {
+    return db
+        .query(
+            `SELECT * FROM users
+        WHERE id = $1`,
+            [id]
+        )
+        .then(results => {
+            return results.rows;
+        });
+};
+
+exports.uploadProfilePic = function(id, profilePic) {
+    return db
+        .query(
+            `UPDATE users
+            SET profilepicurl = $2
+            WHERE id = $1
+            RETURNING profilepicurl AS url`,
+            [id, profilePic]
+        )
+        .then(results => {
+            return results.rows;
+        });
+};
