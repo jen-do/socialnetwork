@@ -34,10 +34,11 @@ export default class App extends React.Component {
     }
 
     updateProfilePic(imgUrl) {
-        console.log("updateProfilePic: ", this.state.profilePicUrl);
+        console.log("updateProfilePic: ", this.state.image);
         this.setState(
             {
-                profilePicUrl: imgUrl
+                image: imgUrl
+                // uploaderIsVisible: false
             },
             () => console.log("this.state in updateProfilePic", this.state)
         );
@@ -64,7 +65,7 @@ export default class App extends React.Component {
                 <ProfilePic
                     first={this.state.first}
                     last={this.state.last}
-                    profilePicUrl={this.state.profilePicUrl}
+                    image={this.state.image}
                     showUploader={this.showUploader}
                 />
                 {this.state.uploaderIsVisible && (

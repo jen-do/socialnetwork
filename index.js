@@ -132,7 +132,7 @@ app.post("/login", (req, res) => {
 app.get("/user", (req, res) => {
     db.getUserInfo(req.session.id)
         .then(results => {
-            // console.log("results in getUserinfo: ", results);
+            console.log("results in getUserinfo: ", results);
             res.json(results[0]);
         })
         .catch(err => {
@@ -146,7 +146,7 @@ app.post("/upload", uploader.single("file"), (req, res) => {
         .then(results => {
             console.log(results[0].url);
             res.json({
-                newProfilePicUrl: results[0].url,
+                image: results[0].url,
                 success: true
             });
         })

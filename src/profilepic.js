@@ -10,7 +10,7 @@ export default function ProfilePic(props) {
             <img
                 id="profile-pic"
                 onClick={props.showUploader}
-                src={props.profilePicUrl || "/images/slide4-klein.jpg"}
+                src={props.image || "/images/slide4-klein.jpg"}
             />
         </div>
     );

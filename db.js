@@ -48,9 +48,9 @@ exports.uploadProfilePic = function(id, profilePic) {
     return db
         .query(
             `UPDATE users
-            SET profilepicurl = $2
+            SET image = $2
             WHERE id = $1
-            RETURNING profilepicurl AS url`,
+            RETURNING image AS url`,
             [id, profilePic]
         )
         .then(results => {

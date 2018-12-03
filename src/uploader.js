@@ -27,10 +27,11 @@ export default class Uploader extends React.Component {
         axios
             .post("/upload", formData)
             .then(({ data }) => {
+                console.log("data in upload: ", data);
                 if (data.success) {
-                    this.props.updateProfilePic(data.newProfilePicUrl);
+                    this.props.updateProfilePic(data.image);
                     this.setState({
-                        newProfilePic: data.newProfilePicUrl
+                        image: data.image
                     });
                     this.props.hideUploader();
                 } else {
