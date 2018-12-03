@@ -3,6 +3,8 @@ import axios from "./axios";
 import Logo from "./logo";
 import ProfilePic from "./profilepic";
 import Uploader from "./uploader";
+import Profile from "./profile";
+import { BrowserRouter, Route } from "react-router-dom";
 
 export default class App extends React.Component {
     constructor() {
@@ -13,6 +15,7 @@ export default class App extends React.Component {
         this.showUploader = this.showUploader.bind(this);
         this.hideUploader = this.hideUploader.bind(this);
         this.updateProfilePic = this.updateProfilePic.bind(this);
+        this.setBio = this.setBio.bind(this);
     }
 
     showUploader() {
@@ -25,22 +28,29 @@ export default class App extends React.Component {
     }
 
     hideUploader() {
-        this.setState(
-            {
-                uploaderIsVisible: false
-            },
-            () => console.log("this.state in hideUploader", this.state)
-        );
+        this.setState({
+            uploaderIsVisible: false
+        });
     }
 
     updateProfilePic(imgUrl) {
         console.log("updateProfilePic: ", this.state.image);
         this.setState(
             {
-                image: imgUrl
-                // uploaderIsVisible: false
+                image: imgUrl,
+                uploaderIsVisible: false
             },
             () => console.log("this.state in updateProfilePic", this.state)
+        );
+    }
+
+    setBio(bio) {
+        this.setState(
+            {
+                bio: bio,
+                editorIsVisible: false
+            },
+            () => console.log("this.state in setBio: ", this.state)
         );
     }
 
@@ -50,7 +60,6 @@ export default class App extends React.Component {
     componentDidMount() {
         axios.get("/user").then(
             ({ data }) => {
-                console.log("data", data);
                 this.setState(data);
             },
             () => console.log("data", this.state)
@@ -61,20 +70,42 @@ export default class App extends React.Component {
     render() {
         return (
             <div>
-                <Logo />
-                <ProfilePic
-                    first={this.state.first}
-                    last={this.state.last}
-                    image={this.state.image}
-                    showUploader={this.showUploader}
-                />
+                <div id="header">
+                    <Logo />
+                    <ProfilePic
+                        first={this.state.first}
+                        last={this.state.last}
+                        image={this.state.image}
+                        showUploader={this.showUploader}
+                    />
+                </div>
+                <BrowserRouter>
+                    <div>
+                        <Route
+                            exact
+                            path="/"
+                            render={() => {
+                                return (
+                                    <Profile
+                                        id={this.state.id}
+                                        first={this.state.first}
+                                        last={this.state.last}
+                                        image={this.state.image}
+                                        bio={this.state.bio}
+                                        setBio={this.setBio}
+                                        showUploader={this.showUploader}
+                                    />
+                                );
+                            }}
+                        />
+                    </div>
+                </BrowserRouter>
                 {this.state.uploaderIsVisible && (
                     <Uploader
                         updateProfilePic={this.updateProfilePic}
                         hideUploader={this.hideUploader}
                     />
                 )}
-                <h1>Welcome!</h1>
             </div>
         );
     }

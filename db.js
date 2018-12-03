@@ -57,3 +57,17 @@ exports.uploadProfilePic = function(id, profilePic) {
             return results.rows;
         });
 };
+
+exports.setBio = function(id, bio) {
+    return db
+        .query(
+            `UPDATE users
+            SET bio = $2
+            WHERE id = $1
+            RETURNING bio`,
+            [id, bio]
+        )
+        .then(results => {
+            return results.rows;
+        });
+};

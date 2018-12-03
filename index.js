@@ -6,6 +6,7 @@ const csurf = require("csurf");
 const multer = require("multer");
 const uidSafe = require("uid-safe");
 const path = require("path");
+const s3 = require("./s3.js");
 const db = require("./db");
 
 app.use(express.static("./public"));
@@ -140,9 +141,12 @@ app.get("/user", (req, res) => {
         });
 });
 
-app.post("/upload", uploader.single("file"), (req, res) => {
+app.post("/upload", uploader.single("file"), s3.upload, (req, res) => {
     console.log("req.file in POST /upload", req.file, req.body);
-    db.uploadProfilePic(req.session.id, "/" + req.file.filename)
+    db.uploadProfilePic(
+        req.session.id,
+        "https://s3.amazonaws.com/spicedling/" + req.file.filename
+    )
         .then(results => {
             console.log(results[0].url);
             res.json({
@@ -152,6 +156,24 @@ app.post("/upload", uploader.single("file"), (req, res) => {
         })
         .catch(err => {
             console.log("error in POST /uploads if statement: ", err);
+            res.json({
+                success: false
+            });
+        });
+});
+
+app.post("/bio", (req, res) => {
+    console.log(req.body);
+    db.setBio(req.session.id, req.body.bio)
+        .then(results => {
+            console.log("results in updating bio in db: ", results);
+            res.json({
+                bio: results[0].bio,
+                success: true
+            });
+        })
+        .catch(err => {
+            console.log("error in updating bio in db : ", err);
             res.json({
                 success: false
             });

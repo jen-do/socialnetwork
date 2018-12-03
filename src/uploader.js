@@ -30,12 +30,11 @@ export default class Uploader extends React.Component {
                 console.log("data in upload: ", data);
                 if (data.success) {
                     this.props.updateProfilePic(data.image);
-                    this.setState({
-                        image: data.image
-                    });
-                    this.props.hideUploader();
+                    // this.setState({
+                    //     image: data.image
+                    // });
+                    // this.props.hideUploader();
                 } else {
-                    // console.log("error in axios POST /upload", error);
                     this.setState({
                         error: true
                     });
@@ -51,22 +50,25 @@ export default class Uploader extends React.Component {
 
     render() {
         return (
-            <div>
-                <h1>upload an image</h1>
-                {this.state.error && (
-                    <div className="error-message">
-                        Something went wrong. Please try again.
-                    </div>
-                )}
-                <form onSubmit={this.handleSubmit}>
-                    <input
-                        onChange={this.handleChange}
-                        name="file"
-                        type="file"
-                        accept="image/*"
-                    />
-                    <button>upload</button>
-                </form>
+            <div id="upload-outer-container">
+                <div id="upload-inner-container">
+                    <p onClick={this.props.hideUploader}>x</p>
+                    <h1>upload an image</h1>
+                    {this.state.error && (
+                        <div className="error-message">
+                            Something went wrong. Please try again.
+                        </div>
+                    )}
+                    <form onSubmit={this.handleSubmit}>
+                        <input
+                            onChange={this.handleChange}
+                            name="file"
+                            type="file"
+                            accept="image/*"
+                        />
+                        <button>upload</button>
+                    </form>
+                </div>
             </div>
         );
     }
