@@ -71,3 +71,41 @@ exports.setBio = function(id, bio) {
             return results.rows;
         });
 };
+
+exports.getOtherProfiles = function(id) {
+    return db
+        .query(
+            `SELECT * FROM users
+        WHERE id = $1`,
+            [id]
+        )
+        .then(results => {
+            return results.rows;
+        });
+};
+
+exports.checkFriendship = function(user_one, user_two) {
+    return db
+        .query(
+            `SELECT * FROM friendships
+            WHERE (receiver = $1 AND sender = $2)
+            OR (receiver = $2 AND sender = $1)`,
+            [user_one, user_two]
+        )
+        .then(results => {
+            return results.rows;
+        });
+};
+
+exports.makeFriendRequest = function(receiver, sender) {
+    return db
+        .query(
+            `INSERT INTO friendships (receiver, sender)
+            VALUES ($1, $2)
+            RETURNING receiver, sender, accepted`,
+            [receiver || null, sender || null]
+        )
+        .then(results => {
+            return results.rows;
+        });
+};

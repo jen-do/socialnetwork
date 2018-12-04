@@ -8,7 +8,7 @@ let component;
 if (location.pathname == "/welcome") {
     // render welcome screen with registration OR login
     component = <Welcome />;
-} else if (location.pathname == "/") {
+} else {
     // render logged-in section
     component = <App />;
 }

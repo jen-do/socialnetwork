@@ -62,6 +62,8 @@ if (process.env.NODE_ENV != "production") {
     app.use("/bundle.js", (req, res) => res.sendFile(`${__dirname}/bundle.js`));
 }
 
+//////////////// register + login routes ////////////////
+
 app.post("/registration", (req, res) => {
     // console.log("req.body in /registration: ", req.body);
     bcrypt
@@ -130,10 +132,12 @@ app.post("/login", (req, res) => {
         });
 });
 
+//////////////// profile / bio routes ////////////////
+
 app.get("/user", (req, res) => {
     db.getUserInfo(req.session.id)
         .then(results => {
-            console.log("results in getUserinfo: ", results);
+            // console.log("results in getUserinfo: ", results);
             res.json(results[0]);
         })
         .catch(err => {
@@ -166,7 +170,7 @@ app.post("/bio", (req, res) => {
     console.log(req.body);
     db.setBio(req.session.id, req.body.bio)
         .then(results => {
-            console.log("results in updating bio in db: ", results);
+            // console.log("results in updating bio in db: ", results);
             res.json({
                 bio: results[0].bio,
                 success: true
@@ -179,6 +183,66 @@ app.post("/bio", (req, res) => {
             });
         });
 });
+
+app.get("/user/:id/profile", (req, res) => {
+    // console.log("req.params.id in GET opp:", req.params.id);
+    if (req.params.id == req.session.id) {
+        res.redirect("/");
+    } else {
+        db.getOtherProfiles(req.params.id)
+            .then(results => {
+                // console.log("results in getOtherProfiles:", results[0]);
+                res.json({
+                    results: results,
+                    success: true
+                });
+            })
+            .catch(err => {
+                console.log("error in getting other peoples profiles: ", err);
+                res.json({
+                    success: false
+                });
+            });
+    }
+});
+
+//////////////// friendship button routes ////////////////
+
+app.get("/friends/:id", (req, res) => {
+    console.log("req.params in GET checkfriendship", req.params.id);
+    db.checkFriendship(req.params.id, req.session.id)
+        .then(results => {
+            console.log("results in GET checkFrienship serverside: ", results);
+            if (!results.length > 0) {
+                res.json({
+                    noFriendsYet: true
+                });
+            } else {
+                res.json(results);
+            }
+        })
+        .catch(err => {
+            console.log("error in GET checkfrienship serverside:", err);
+        });
+});
+
+app.post("/friendrequest/:id", (req, res) => {
+    console.log("req.params in POST makeFriendRequest", req.params.id);
+    db.makeFriendRequest(req.params.id, req.session.id)
+        .then(results => {
+            console.log(results);
+            res.json(results[0]);
+        })
+        .catch(err => {
+            console.log("error in POST makeFriendRequest serverside:", err);
+        });
+});
+
+app.post("/acceptfriendrequest/:id", (req, res) => {
+    console.log("req.params in POST acceptFriendRequest", req.params.id);
+});
+
+//////////////// redirect routes ////////////////
 
 app.get("/welcome", function(req, res) {
     if (req.session.id && req.url == "/welcome") {
