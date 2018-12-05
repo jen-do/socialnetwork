@@ -7,17 +7,15 @@ export default class FriendButton extends React.Component {
         this.state = {};
         this.makeFriendRequest = this.makeFriendRequest.bind(this);
         this.acceptFriendRequest = this.acceptFriendRequest.bind(this);
-        this.cancelFriendship = this.cancelFriendship.bind(this);
-        console.log("this.props in FriendButton", this.props);
+        this.endFriendship = this.endFriendship.bind(this);
+        // console.log("this.props in FriendButton", this.props);
     }
 
     componentDidMount() {
-        console.log("props in FriendButton", this.props.otherUserId);
         axios
             .get("/friends/" + this.props.otherUserId)
             .then(({ data }) => {
-                console.log("data in checkfriendship axios:", data);
-                this.setState(data[0]);
+                this.setState(data);
             })
             .catch(err => {
                 console.log("error in checkFrienship axios: ", err);
@@ -28,9 +26,8 @@ export default class FriendButton extends React.Component {
         axios
             .post("/friendrequest/" + this.props.otherUserId)
             .then(({ data }) => {
-                console.log("data in makeFriendRequest axios:", data);
                 this.setState({
-                    noFriendsYet: false,
+                    noRelationship: false,
                     ...data
                 });
             })
@@ -40,34 +37,39 @@ export default class FriendButton extends React.Component {
     }
 
     acceptFriendRequest() {
-        console.log("acceptFriendrequest");
         axios
             .post("/acceptfriendrequest/" + this.props.otherUserId)
             .then(({ data }) => {
-                console.log("data in acceptFriendRequest axios:", data);
+                this.setState(data);
             })
             .catch(err => {
                 console.log("error in acceptFriendRequest axios: ", err);
             });
     }
 
-    cancelFriendship() {
-        console.log("cancel friendship/friend request");
+    endFriendship() {
+        axios
+            .post("/endfriendship/" + this.props.otherUserId)
+            .then(({ data }) => {
+                this.setState(data);
+            })
+            .catch(err => {
+                console.log("error in endFrienship axios: ", err);
+            });
     }
 
     render() {
         let friendButton;
 
-        if (this.state.noFriendsYet) {
+        if (this.state.noRelationship) {
             friendButton = (
                 <button id="friendbutton" onClick={this.makeFriendRequest}>
                     Make friend request
                 </button>
             );
         }
-        if (!this.state.noFriendsYet) {
+        if (!this.state.noRelationship) {
             if (!this.state.accepted) {
-                console.log("1", this.state.sender, this.props.otherUserId);
                 if (this.state.sender == this.props.otherUserId) {
                     friendButton = (
                         <button
@@ -80,10 +82,7 @@ export default class FriendButton extends React.Component {
                 }
                 if (this.state.sender != this.props.otherUserId) {
                     friendButton = (
-                        <button
-                            onClick={this.cancelFriendship}
-                            id="friendbutton"
-                        >
+                        <button onClick={this.endFriendship} id="friendbutton">
                             Cancel friend request
                         </button>
                     );
@@ -91,7 +90,7 @@ export default class FriendButton extends React.Component {
             }
             if (this.state.accepted) {
                 friendButton = (
-                    <button onClick={this.cancelFriendship} id="friendbutton">
+                    <button onClick={this.endFriendship} id="friendbutton">
                         End friendship
                     </button>
                 );

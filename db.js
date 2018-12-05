@@ -109,3 +109,30 @@ exports.makeFriendRequest = function(receiver, sender) {
             return results.rows;
         });
 };
+
+exports.acceptFriendRequest = function(receiver, sender) {
+    return db
+        .query(
+            `UPDATE friendships
+            SET accepted = true
+            WHERE receiver = $1 AND sender = $2
+            RETURNING receiver, sender, accepted`,
+            [receiver, sender]
+        )
+        .then(results => {
+            return results.rows;
+        });
+};
+
+exports.endFriendship = function(user_one, user_two) {
+    return db
+        .query(
+            `DELETE FROM friendships
+            WHERE (receiver = $1 AND sender = $2)
+            OR (receiver = $2 AND sender = $1)`,
+            [user_one, user_two]
+        )
+        .then(results => {
+            return results.rows;
+        });
+};

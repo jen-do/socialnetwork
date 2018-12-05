@@ -209,16 +209,15 @@ app.get("/user/:id/profile", (req, res) => {
 //////////////// friendship button routes ////////////////
 
 app.get("/friends/:id", (req, res) => {
-    console.log("req.params in GET checkfriendship", req.params.id);
     db.checkFriendship(req.params.id, req.session.id)
         .then(results => {
-            console.log("results in GET checkFrienship serverside: ", results);
+            // console.log("results in GET checkFrienship serverside: ", results);
             if (!results.length > 0) {
                 res.json({
-                    noFriendsYet: true
+                    noRelationship: true
                 });
             } else {
-                res.json(results);
+                res.json(results[0]);
             }
         })
         .catch(err => {
@@ -227,10 +226,8 @@ app.get("/friends/:id", (req, res) => {
 });
 
 app.post("/friendrequest/:id", (req, res) => {
-    console.log("req.params in POST makeFriendRequest", req.params.id);
     db.makeFriendRequest(req.params.id, req.session.id)
         .then(results => {
-            console.log(results);
             res.json(results[0]);
         })
         .catch(err => {
@@ -239,7 +236,27 @@ app.post("/friendrequest/:id", (req, res) => {
 });
 
 app.post("/acceptfriendrequest/:id", (req, res) => {
-    console.log("req.params in POST acceptFriendRequest", req.params.id);
+    db.acceptFriendRequest(req.session.id, req.params.id)
+        .then(results => {
+            // console.log(results);
+            res.json(results[0]);
+        })
+        .catch(err => {
+            console.log("error in POST acceptFriendRequest serverside:", err);
+        });
+});
+
+app.post("/endfriendship/:id", (req, res) => {
+    db.endFriendship(req.session.id, req.params.id)
+        .then(results => {
+            res.json({
+                noRelationship: true,
+                ...results[0]
+            });
+        })
+        .catch(err => {
+            console.log("error in POST endFrienship serverside:", err);
+        });
 });
 
 //////////////// redirect routes ////////////////
