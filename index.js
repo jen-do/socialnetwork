@@ -261,6 +261,11 @@ app.post("/endfriendship/:id", (req, res) => {
 
 //////////////// redirect routes ////////////////
 
+app.get("/logout", (req, res) => {
+    req.session = null;
+    res.redirect("/welcome#/login");
+});
+
 app.get("/welcome", function(req, res) {
     if (req.session.id && req.url == "/welcome") {
         res.redirect("/");

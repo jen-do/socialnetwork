@@ -6,6 +6,7 @@ import Uploader from "./uploader";
 import Profile from "./profile";
 import OtherPersonProfile from "./otherpersonprofile";
 import { BrowserRouter, Route } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 export default class App extends React.Component {
     constructor() {
@@ -55,6 +56,10 @@ export default class App extends React.Component {
         );
     }
 
+    logout() {
+        this.props.history.push("/logout");
+    }
+
     // #2 componentDidMount runs
     // built-in lifecyle method componentDidMount: similar to mounted function in Vue, runs when HTML loaded; axios GET requests for info needed from the server to correctly render the content go here
     // React lifecyle methods don't have to be bound
@@ -81,7 +86,7 @@ export default class App extends React.Component {
                     />
                 </div>
                 <BrowserRouter>
-                    <div>
+                    <div className="content-container">
                         <Route
                             exact
                             path="/"
@@ -103,6 +108,13 @@ export default class App extends React.Component {
                             path="/user/:id"
                             component={OtherPersonProfile}
                         />
+                        <Link
+                            id="logout-button"
+                            to="/logout"
+                            onClick={this.logout}
+                        >
+                            logout
+                        </Link>
                     </div>
                 </BrowserRouter>
                 {this.state.uploaderIsVisible && (

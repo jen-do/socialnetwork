@@ -29,9 +29,10 @@ export default class OtherPersonProfile extends React.Component {
     render() {
         return (
             <div className="opp-component">
+                <h1 className="centered-text">Other Profiles</h1>
                 <img
                     id="opp-pic"
-                    src={this.state.image || "/images/slide4-klein.jpg"}
+                    src={this.state.image || "/images/placeholder.png"}
                 />
                 <h2>
                     {this.state.first} {this.state.last}

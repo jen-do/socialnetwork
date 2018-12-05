@@ -8,10 +8,20 @@ h1,
 h2 {
     font-family: "Oswald", sans-serif;
     font-weight: 500;
+    margin-bottom: 10px;
 }
 
 a {
     text-decoration: none;
+}
+
+.centered-text {
+    text-align: center;
+}
+
+main {
+    height: 100vh;
+    background: #f9f8eb;
 }
 
 .welcome-container {
@@ -67,9 +77,20 @@ button {
     background: green;
 }
 
+#logout-button {
+    position: absolute;
+    right: 10px;
+    bottom: 10px;
+    padding: 10px;
+    background: #5c8d89;
+    border-radius: 5px;
+    color: #f9f8eb;
+    font-weight: bold;
+}
+
 #header {
-    border-bottom: 2px solid #1b3c68;
     height: 70px;
+    background: #5c8d89;
 }
 
 #logo,
@@ -87,7 +108,6 @@ button {
     float: right;
     width: 50px;
     height: 50px;
-    margin: 10px;
     cursor: pointer;
     border-radius: 50%;
     object-fit: cover;
@@ -96,7 +116,8 @@ button {
 #profile,
 .opp-component {
     clear: both;
-    margin-top: 20px;
+    margin: 20px auto;
+    height: auto;
 }
 
 #profile #profile-pic,
