@@ -251,11 +251,25 @@ app.post("/endfriendship/:id", (req, res) => {
         .then(results => {
             res.json({
                 noRelationship: true,
-                ...results[0]
+                otherUser: req.params.id,
+                accepted: false
             });
         })
         .catch(err => {
             console.log("error in POST endFrienship serverside:", err);
+        });
+});
+
+//////////////// redux: friends + wannabes ///////
+
+app.get("/listfriendsandwannabes", (req, res) => {
+    db.getFriendsAndWannabes(req.session.id)
+        .then(results => {
+            console.log("results in getFriendsAndWannabes serverside", results);
+            res.json(results);
+        })
+        .catch(err => {
+            console.log("error in getFriendsAndWannabes serverside:", err);
         });
 });
 

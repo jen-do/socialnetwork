@@ -129,6 +129,13 @@ button {
     margin-right: 30px;
 }
 
+.friends-pic {
+    width: 100px;
+    height: auto;
+    border-radius: 0;
+    margin-right: 30px;
+}
+
 #upload-outer-container {
     position: fixed;
     top: 0;
@@ -148,4 +155,8 @@ button {
     left: 20%;
     top: 20%;
     text-align: center;
+}
+
+.friends {
+    display: block;
 }

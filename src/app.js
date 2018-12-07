@@ -5,6 +5,7 @@ import ProfilePic from "./profilepic";
 import Uploader from "./uploader";
 import Profile from "./profile";
 import OtherPersonProfile from "./otherpersonprofile";
+import Friends from "./friends";
 import { BrowserRouter, Route } from "react-router-dom";
 import { Link } from "react-router-dom";
 
@@ -108,6 +109,7 @@ export default class App extends React.Component {
                             path="/user/:id"
                             component={OtherPersonProfile}
                         />
+                        <Route path="/friends" component={Friends} />
                         <Link
                             id="logout-button"
                             to="/logout"

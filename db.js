@@ -136,3 +136,21 @@ exports.endFriendship = function(user_one, user_two) {
             return results.rows;
         });
 };
+
+exports.getFriendsAndWannabes = function(id) {
+    return db
+        .query(
+            `
+            SELECT users.id, first, last, image, accepted
+            FROM friendships
+            JOIN users
+            ON (accepted = false AND receiver = $1 AND sender = users.id)
+            OR (accepted = true AND receiver = $1 AND sender = users.id)
+            OR (accepted = true AND sender = $1 AND receiver = users.id)
+            `,
+            [id]
+        )
+        .then(results => {
+            return results.rows;
+        });
+};
