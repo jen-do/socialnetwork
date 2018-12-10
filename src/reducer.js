@@ -48,6 +48,21 @@ export default function reducer(state = {}, action) {
                 })
         };
     }
+    if (action.type == "ONLINE_USERS_LIST") {
+        console.log("ONLINE_USERS_LIST in reducer", action);
+        var listOfUsersOnline = action.onlineUsers;
+        return { ...state, listOfUsersOnline };
+    }
+    if (action.type == "USER_WHO_JOINED") {
+        console.log("USER_WHO_JOINED", action.newUser);
+        var newUser = action.newUser;
+        return (state = {
+            ...state,
+            listOfUsersOnline:
+                state.listOfUsersOnline &&
+                state.listOfUsersOnline.concat(newUser)
+        });
+    }
     console.log("state in reducer", state);
     return state;
 }

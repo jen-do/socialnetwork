@@ -6,6 +6,7 @@ import Uploader from "./uploader";
 import Profile from "./profile";
 import OtherPersonProfile from "./otherpersonprofile";
 import Friends from "./friends";
+import OnlineUsers from "./onlineusers";
 import { BrowserRouter, Route } from "react-router-dom";
 import { Link } from "react-router-dom";
 
@@ -77,46 +78,64 @@ export default class App extends React.Component {
     render() {
         return (
             <div>
-                <div id="header">
-                    <Logo />
-                    <ProfilePic
-                        first={this.state.first}
-                        last={this.state.last}
-                        image={this.state.image}
-                        showUploader={this.showUploader}
-                    />
-                </div>
                 <BrowserRouter>
-                    <div className="content-container">
-                        <Route
-                            exact
-                            path="/"
-                            render={() => {
-                                return (
-                                    <Profile
-                                        id={this.state.id}
-                                        first={this.state.first}
-                                        last={this.state.last}
-                                        image={this.state.image}
-                                        bio={this.state.bio}
-                                        setBio={this.setBio}
-                                        showUploader={this.showUploader}
-                                    />
-                                );
-                            }}
-                        />
-                        <Route
-                            path="/user/:id"
-                            component={OtherPersonProfile}
-                        />
-                        <Route path="/friends" component={Friends} />
-                        <Link
-                            id="logout-button"
-                            to="/logout"
-                            onClick={this.logout}
-                        >
-                            logout
-                        </Link>
+                    <div>
+                        <div id="header">
+                            <Logo />
+                            <div id="nav">
+                                <Link to="/" className="navitem">
+                                    home
+                                </Link>
+                                <Link to="/friends" className="navitem">
+                                    friends
+                                </Link>
+                                <Link to="/onlineusers" className="navitem">
+                                    who's online
+                                </Link>
+                                <Link
+                                    to="/logout"
+                                    className="navitem"
+                                    onClick={this.logout}
+                                >
+                                    logout
+                                </Link>
+                                <ProfilePic
+                                    first={this.state.first}
+                                    last={this.state.last}
+                                    image={this.state.image}
+                                    showUploader={this.showUploader}
+                                />
+                            </div>
+                        </div>
+
+                        <div className="content-container">
+                            <Route
+                                exact
+                                path="/"
+                                render={() => {
+                                    return (
+                                        <Profile
+                                            id={this.state.id}
+                                            first={this.state.first}
+                                            last={this.state.last}
+                                            image={this.state.image}
+                                            bio={this.state.bio}
+                                            setBio={this.setBio}
+                                            showUploader={this.showUploader}
+                                        />
+                                    );
+                                }}
+                            />
+                            <Route
+                                path="/user/:id"
+                                component={OtherPersonProfile}
+                            />
+                            <Route path="/friends" component={Friends} />
+                            <Route
+                                path="/onlineusers"
+                                component={OnlineUsers}
+                            />
+                        </div>
                     </div>
                 </BrowserRouter>
                 {this.state.uploaderIsVisible && (

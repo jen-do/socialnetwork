@@ -82,7 +82,7 @@ export default class FriendButton extends React.Component {
                 }
                 if (this.state.sender != this.props.otherUserId) {
                     friendButton = (
-                        <button onClick={this.endFriendship} id="friendbutton">
+                        <button onClick={this.endFriendship} id="endfriendship">
                             Cancel friend request
                         </button>
                     );
@@ -90,7 +90,7 @@ export default class FriendButton extends React.Component {
             }
             if (this.state.accepted) {
                 friendButton = (
-                    <button onClick={this.endFriendship} id="friendbutton">
+                    <button onClick={this.endFriendship} id="endfriendship">
                         End friendship
                     </button>
                 );

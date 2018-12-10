@@ -30,3 +30,19 @@ export async function endFriendship(id) {
         accepted: data.accepted
     };
 }
+
+export async function showListOfOnlineUsers(listOfUsersOnline) {
+    console.log("list", listOfUsersOnline);
+    return {
+        type: "ONLINE_USERS_LIST",
+        onlineUsers: listOfUsersOnline
+    };
+}
+
+export async function showUserWhoJoined(userWhoJoined) {
+    console.log("userWhoJoined", userWhoJoined);
+    return {
+        type: "USER_WHO_JOINED",
+        newUser: userWhoJoined
+    };
+}

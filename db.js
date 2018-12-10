@@ -154,3 +154,22 @@ exports.getFriendsAndWannabes = function(id) {
             return results.rows;
         });
 };
+
+exports.getUsersByIds = function(arrayOfIds) {
+    const query = `SELECT id, first, last, image FROM users WHERE id = ANY($1)`;
+    return db.query(query, [arrayOfIds]);
+};
+
+exports.getUserWhoJoined = function(id) {
+    return db
+        .query(
+            `
+        SELECT id, first, last, image 
+        FROM users
+        WHERE id = $1`,
+            [id]
+        )
+        .then(results => {
+            return results.rows;
+        });
+};

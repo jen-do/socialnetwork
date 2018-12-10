@@ -5,15 +5,21 @@ import {
     acceptFriendRequest,
     endFriendship
 } from "./actions";
+// import { Link } from "react-router-dom";
 
 class Friends extends React.Component {
     constructor() {
         super();
+        this.redirect = this.redirect.bind(this);
     }
 
     componentDidMount() {
         // call dispatch function for getting the complete list of friends and wannabes (action getFriendsAndWannabes)
         this.props.dispatch(getFriendsAndWannabes());
+    }
+
+    redirect(id) {
+        this.props.history.push("/user/" + id);
     }
 
     render() {
@@ -24,9 +30,9 @@ class Friends extends React.Component {
             this.props.wannabes
         );
         return (
-            <div>
+            <div id="friends-container">
+                <h2>Your friends</h2>
                 <div id="friends-list">
-                    <h2>Your friends</h2>
                     {this.props.friends &&
                         this.props.friends.map(friend => {
                             return (
@@ -37,8 +43,12 @@ class Friends extends React.Component {
                                             friend.image ||
                                             "/images/placeholder.png"
                                         }
+                                        onClick={() => this.redirect(friend.id)}
                                     />
-                                    {friend.first} {friend.last}
+
+                                    <p>
+                                        {friend.first} {friend.last}
+                                    </p>
                                     <button
                                         onClick={() =>
                                             this.props.dispatch(
@@ -52,8 +62,8 @@ class Friends extends React.Component {
                             );
                         })}
                 </div>
+                <h2>These people want to be your friends</h2>
                 <div id="wannabe-list">
-                    <h2>These people want to be your friends</h2>
                     {this.props.wannabes &&
                         this.props.wannabes.map(wannabe => {
                             return (
@@ -64,8 +74,14 @@ class Friends extends React.Component {
                                             wannabe.image ||
                                             "/images/placeholder.png"
                                         }
+                                        onClick={() =>
+                                            this.redirect(wannabe.id)
+                                        }
                                     />
-                                    {wannabe.first} {wannabe.last}
+
+                                    <p>
+                                        {wannabe.first} {wannabe.last}
+                                    </p>
                                     <button
                                         onClick={() =>
                                             this.props.dispatch(

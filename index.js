@@ -1,5 +1,7 @@
 const express = require("express");
 const app = express();
+const server = require("http").Server(app); // creates an HTTP server and passing it the app express-server, wraps the express-server (express will listen for get and post requests, socket listens for socket requests)
+const io = require("socket.io")(server, { origins: "localhost:8080" });
 const compression = require("compression");
 const bcrypt = require("./bcrypt");
 const csurf = require("csurf");
@@ -12,14 +14,18 @@ const db = require("./db");
 app.use(express.static("./public"));
 app.use(express.static("./uploads"));
 const cookieSession = require("cookie-session");
+const cookieSessionMiddleware = cookieSession({
+    secret: `I'm always angry.`,
+    maxAge: 1000 * 60 * 60 * 24 * 90
+});
+
+app.use(cookieSessionMiddleware);
+// this passes the cookieSession info to server-side socket, so socket has access to session data
+io.use(function(socket, next) {
+    cookieSessionMiddleware(socket.request, socket.request.res, next);
+});
 const bodyparser = require("body-parser");
 app.use(bodyparser.json());
-app.use(
-    cookieSession({
-        secret: `I'm always angry.`,
-        maxAge: 1000 * 60 * 60 * 24 * 14
-    })
-);
 
 // boilerplate for file upload
 var diskStorage = multer.diskStorage({
@@ -296,6 +302,66 @@ app.get("*", function(req, res) {
     }
 });
 
-app.listen(8080, function() {
+server.listen(8080, function() {
     console.log("I'm listening.");
+}); // server will listen for both HTTP and sockets requests
+
+/////////////////////////////////////////////////////////////////////////////
+////////// put all of server-side socket code below server.listen ///////////
+/////////////////////////////////////////////////////////////////////////////
+
+// onlineUsers obj will be responsible for maintaining a list of everyone who's currently online - left socketId, right userId
+let onlineUsers = {};
+
+io.on("connection", socket => {
+    console.log(`user with socket id ${socket.id} just connected`);
+    let socketId = socket.id;
+    let userId = socket.request.session.id;
+    onlineUsers[socketId] = userId;
+    console.log("onlineUsers: ", onlineUsers, socketId);
+
+    let arrayOfIds = Object.values(onlineUsers); // will extract every value from onlineUsers and store it in an array
+    console.log("arrayOfIds", arrayOfIds);
+
+    db.getUsersByIds(arrayOfIds)
+        .then(results => {
+            console.log(
+                "results in serverside socket db query getUsersByIds",
+                results
+            );
+            socket.emit("onlineUsers", results.rows);
+        })
+        .catch(err => {
+            console.log(
+                "error in serverside socket db query getUsersByIds",
+                err
+            );
+        });
+
+    console.log("ID of user just joined", arrayOfIds.slice(-1)[0]);
+
+    if (arrayOfIds.indexOf(userId) !== arrayOfIds.length - 1) {
+        return;
+    } else {
+        var newUser = arrayOfIds.slice(-1)[0];
+        db.getUserWhoJoined(newUser)
+            .then(results => {
+                console.log("results in getUserWhoJoined", results);
+                socket.broadcast.emit("userJoined", results);
+            })
+            .catch(err => {
+                console.log("error in getUserWhoJoined", err);
+            });
+    }
+
+    socket.on("disconnect", function() {
+        // this code happens whenever a user disconnects (e.e. closes tab, logs out etc.)
+        console.log(`socket with id ${socket.id} just disconnected`);
+        // fire userLeft event here
+    });
+
+    // send message from server to client, pass emit() 2 arguments: 1) name of message, 2) any data we want to send as part of the message (data can be any result from db query, API query, normal array, obj, string, int ...):
+    // db.getUser(userId).then(results => {
+    //     socket.emit("catnip", result);
+    // });
 });
