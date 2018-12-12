@@ -1,16 +1,16 @@
 export default function reducer(state = {}, action) {
     if (action.type == "GET_FRIENDS_AND_WANNABES") {
-        console.log("action.list in reducer", action.list);
+        // console.log("action.list in reducer", action.list);
         var list = action.list;
 
         return { ...state, list };
     }
     if (action.type == "ACCEPT") {
-        console.log(
-            "ACCEPT action.list in reducer",
-            action.sender,
-            action.accepted
-        );
+        // console.log(
+        //     "ACCEPT action.list in reducer",
+        //     action.sender,
+        //     action.accepted
+        // );
         state = {
             ...state,
             list:
@@ -28,7 +28,7 @@ export default function reducer(state = {}, action) {
         };
     }
     if (action.type == "END") {
-        console.log("END in reducer", action);
+        // console.log("END in reducer", action);
         state = {
             ...state,
             list:
@@ -49,12 +49,12 @@ export default function reducer(state = {}, action) {
         };
     }
     if (action.type == "ONLINE_USERS_LIST") {
-        console.log("ONLINE_USERS_LIST in reducer", action);
+        // console.log("ONLINE_USERS_LIST in reducer", action);
         var listOfUsersOnline = action.onlineUsers;
         return { ...state, listOfUsersOnline };
     }
     if (action.type == "USER_WHO_JOINED") {
-        console.log("USER_WHO_JOINED", action.newUser);
+        // console.log("USER_WHO_JOINED", action.newUser);
         var newUser = action.newUser;
         return (state = {
             ...state,
@@ -63,6 +63,33 @@ export default function reducer(state = {}, action) {
                 state.listOfUsersOnline.concat(newUser)
         });
     }
-    console.log("state in reducer", state);
+    if (action.type == "USER_WHO_LEFT") {
+        // console.log("Id of userwhoLeft in reducer: ", action.userLeft);
+        // var userLeft = action.userLeft;
+        return (state = {
+            ...state,
+            listOfUsersOnline:
+                state.listOfUsersOnline &&
+                state.listOfUsersOnline.filter(
+                    userOnline => userOnline.id !== action.userLeft
+                )
+        });
+    }
+    if (action.type == "CHAT_MESSAGES") {
+        return {
+            ...state,
+            chatMessages: action.chatMessages
+        };
+    }
+    if (action.type == "NEW_MESSAGE") {
+        console.log("newMessage in reducer", action.newMessage);
+        return {
+            ...state,
+            chatMessages:
+                state.chatMessages &&
+                state.chatMessages.concat(action.newMessage)
+        };
+    }
+
     return state;
 }

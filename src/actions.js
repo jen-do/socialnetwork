@@ -46,3 +46,26 @@ export async function showUserWhoJoined(userWhoJoined) {
         newUser: userWhoJoined
     };
 }
+
+export async function hideUserWhoLeft(userWhoLeft) {
+    console.log("userWhoLeft", userWhoLeft);
+    return {
+        type: "USER_WHO_LEFT",
+        userLeft: userWhoLeft
+    };
+}
+
+export async function getChatMessages(chatMessages) {
+    console.log("chatMessages in actions: ", chatMessages);
+    return {
+        type: "CHAT_MESSAGES",
+        chatMessages: chatMessages
+    };
+}
+
+export async function addNewMessage(newMessage) {
+    return {
+        type: "NEW_MESSAGE",
+        newMessage: newMessage
+    };
+}

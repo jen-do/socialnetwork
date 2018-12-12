@@ -164,9 +164,55 @@ exports.getUserWhoJoined = function(id) {
     return db
         .query(
             `
-        SELECT id, first, last, image 
+        SELECT id, first, last, image
         FROM users
         WHERE id = $1`,
+            [id]
+        )
+        .then(results => {
+            return results.rows;
+        });
+};
+
+exports.getChatMessages = function() {
+    return db
+        .query(
+            `
+        SELECT chat.id, chat.message, users.first, users.last, users.image
+        FROM chat
+        LEFT JOIN users
+        ON chat.sender = users.id
+        ORDER BY chat.id DESC
+        LIMIT 10`
+        )
+        .then(results => {
+            return results.rows;
+        });
+};
+
+exports.addNewMessage = function(message, sender) {
+    return db
+        .query(
+            `
+        INSERT INTO chat (message, sender)
+        VALUES ($1, $2)
+        RETURNING message, sender
+        `,
+            [message || null, sender || null]
+        )
+        .then(results => {
+            return results.rows;
+        });
+};
+
+exports.getSenderInfo = function(id) {
+    return db
+        .query(
+            `
+        SELECT first, last, image
+        FROM users
+        WHERE id = $1
+        `,
             [id]
         )
         .then(results => {

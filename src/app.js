@@ -7,6 +7,7 @@ import Profile from "./profile";
 import OtherPersonProfile from "./otherpersonprofile";
 import Friends from "./friends";
 import OnlineUsers from "./onlineusers";
+import Chat from "./chat";
 import { BrowserRouter, Route } from "react-router-dom";
 import { Link } from "react-router-dom";
 
@@ -92,6 +93,9 @@ export default class App extends React.Component {
                                 <Link to="/onlineusers" className="navitem">
                                     who's online
                                 </Link>
+                                <Link to="/chat" className="navitem">
+                                    chat
+                                </Link>
                                 <Link
                                     to="/logout"
                                     className="navitem"
@@ -135,6 +139,7 @@ export default class App extends React.Component {
                                 path="/onlineusers"
                                 component={OnlineUsers}
                             />
+                            <Route path="/chat" component={Chat} />
                         </div>
                     </div>
                 </BrowserRouter>

@@ -318,17 +318,13 @@ io.on("connection", socket => {
     let socketId = socket.id;
     let userId = socket.request.session.id;
     onlineUsers[socketId] = userId;
-    console.log("onlineUsers: ", onlineUsers, socketId);
+    console.log("onlineUsers: ", onlineUsers);
 
     let arrayOfIds = Object.values(onlineUsers); // will extract every value from onlineUsers and store it in an array
     console.log("arrayOfIds", arrayOfIds);
 
     db.getUsersByIds(arrayOfIds)
         .then(results => {
-            console.log(
-                "results in serverside socket db query getUsersByIds",
-                results
-            );
             socket.emit("onlineUsers", results.rows);
         })
         .catch(err => {
@@ -340,13 +336,10 @@ io.on("connection", socket => {
 
     console.log("ID of user just joined", arrayOfIds.slice(-1)[0]);
 
-    if (arrayOfIds.indexOf(userId) !== arrayOfIds.length - 1) {
-        return;
-    } else {
+    if (arrayOfIds.indexOf(userId) == arrayOfIds.length - 1) {
         var newUser = arrayOfIds.slice(-1)[0];
         db.getUserWhoJoined(newUser)
             .then(results => {
-                console.log("results in getUserWhoJoined", results);
                 socket.broadcast.emit("userJoined", results);
             })
             .catch(err => {
@@ -355,9 +348,43 @@ io.on("connection", socket => {
     }
 
     socket.on("disconnect", function() {
-        // this code happens whenever a user disconnects (e.e. closes tab, logs out etc.)
-        console.log(`socket with id ${socket.id} just disconnected`);
-        // fire userLeft event here
+        delete onlineUsers[socket.id];
+        // console.log(`socket with id ${socket.id} just disconnected`, userId);
+        if (!Object.values(onlineUsers).includes(userId)) {
+            io.sockets.emit("userLeft", userId);
+        }
+    });
+
+    // chat - data flow #1
+    db.getChatMessages()
+        .then(lastTenChatMessages => {
+            console.log("results from db query chat:", lastTenChatMessages);
+            io.sockets.emit("getChatMessages", lastTenChatMessages);
+        })
+        .catch(err => {
+            console.log("error in getChatMessages in index.js:", err);
+        });
+
+    // chat - data flow #2
+    socket.on("newMessage", message => {
+        Promise.all([
+            db.addNewMessage(message, userId),
+            db.getSenderInfo(userId)
+        ])
+            .then(results => {
+                let chatInfo = {
+                    message: results[0][0].message,
+                    id: results[0][0].sender,
+                    first: results[1][0].first,
+                    last: results[1][0].last,
+                    image: results[1][0].image
+                };
+                console.log("chatInfo", chatInfo);
+                io.sockets.emit("addNewMessage", chatInfo);
+            })
+            .catch(err => {
+                console.log("error in addChatMessage in index.js:", err);
+            });
     });
 
     // send message from server to client, pass emit() 2 arguments: 1) name of message, 2) any data we want to send as part of the message (data can be any result from db query, API query, normal array, obj, string, int ...):

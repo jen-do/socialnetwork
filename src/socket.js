@@ -1,7 +1,13 @@
 // most of clientside socket code will go here
 
 import * as io from "socket.io-client";
-import { showListOfOnlineUsers, showUserWhoJoined } from "./actions";
+import {
+    showListOfOnlineUsers,
+    showUserWhoJoined,
+    hideUserWhoLeft,
+    getChatMessages,
+    addNewMessage
+} from "./actions";
 
 let socket;
 
@@ -26,7 +32,17 @@ export function initSocket(store) {
         });
 
         socket.on("userLeft", userWhoLeft => {
-            store.dispatch();
+            store.dispatch(hideUserWhoLeft(userWhoLeft));
+        });
+
+        socket.on("getChatMessages", chatMessages => {
+            console.log("chatMessages: ", chatMessages);
+            store.dispatch(getChatMessages(chatMessages));
+        });
+
+        socket.on("addNewMessage", newMessage => {
+            console.log("newMessage in socket.js:", newMessage);
+            store.dispatch(addNewMessage(newMessage));
         });
     }
     return socket;

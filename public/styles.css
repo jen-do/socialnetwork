@@ -135,7 +135,8 @@ textarea {
 
 #profile,
 .opp-component,
-#friends-container {
+#friends-container,
+#chat {
     clear: both;
     width: 80%;
     margin: 20px auto;

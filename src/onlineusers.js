@@ -11,9 +11,9 @@ class OnlineUsers extends React.Component {
             <div>
                 <h1>Who's online now</h1>
                 {this.props.listUsersOnline &&
-                    this.props.listUsersOnline.map(userOnline => {
+                    this.props.listUsersOnline.map((userOnline, index) => {
                         return (
-                            <div key="userOnline.id">
+                            <div key={index}>
                                 <img
                                     className="friends-pic"
                                     src={
@@ -33,7 +33,7 @@ class OnlineUsers extends React.Component {
 }
 
 function mapStateToProps(state) {
-    console.log(state.listOfUsersOnline);
+    // console.log("state in mapStatetoProps", state.listOfUsersOnline);
     return {
         listUsersOnline: state.listOfUsersOnline
     };
