@@ -28,15 +28,16 @@ export default class OtherPersonProfile extends React.Component {
 
     render() {
         return (
-            <div className="opp-component">
+            <div className="content-component">
                 <h1 className="centered-text">Other Profiles</h1>
+
                 <img
                     id="opp-pic"
                     src={this.state.image || "/images/placeholder.png"}
                 />
-                <h2>
+                <h3>
                     {this.state.first} {this.state.last}
-                </h2>
+                </h3>
                 <p>{this.state.bio}</p>
                 <FriendButton otherUserId={this.props.match.params.id} />
             </div>

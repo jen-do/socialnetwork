@@ -30,13 +30,13 @@ class Friends extends React.Component {
             this.props.wannabes
         );
         return (
-            <div id="friends-container">
+            <div>
                 <h2>Your friends</h2>
                 <div id="friends-list">
                     {this.props.friends &&
                         this.props.friends.map(friend => {
                             return (
-                                <div className="friends" key={friend.id}>
+                                <div className="other-users" key={friend.id}>
                                     <img
                                         className="friends-pic"
                                         src={
@@ -46,9 +46,9 @@ class Friends extends React.Component {
                                         onClick={() => this.redirect(friend.id)}
                                     />
 
-                                    <p>
+                                    <h3>
                                         {friend.first} {friend.last}
-                                    </p>
+                                    </h3>
                                     <button
                                         onClick={() =>
                                             this.props.dispatch(
@@ -67,7 +67,7 @@ class Friends extends React.Component {
                     {this.props.wannabes &&
                         this.props.wannabes.map(wannabe => {
                             return (
-                                <div className="friends" key={wannabe.id}>
+                                <div className="other-users" key={wannabe.id}>
                                     <img
                                         className="friends-pic"
                                         src={
@@ -79,9 +79,9 @@ class Friends extends React.Component {
                                         }
                                     />
 
-                                    <p>
+                                    <h3>
                                         {wannabe.first} {wannabe.last}
-                                    </p>
+                                    </h3>
                                     <button
                                         onClick={() =>
                                             this.props.dispatch(

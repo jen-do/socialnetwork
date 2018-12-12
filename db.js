@@ -196,7 +196,7 @@ exports.addNewMessage = function(message, sender) {
             `
         INSERT INTO chat (message, sender)
         VALUES ($1, $2)
-        RETURNING message, sender
+        RETURNING id, message, sender
         `,
             [message || null, sender || null]
         )

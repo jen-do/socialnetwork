@@ -29,9 +29,9 @@ class Chat extends React.Component {
             this.props.chatMessages
         );
         return (
-            <div id="chat">
+            <div>
                 <h1>Chat</h1>
-                <div id="chat-messages" ref={elem => (this.elem = elem)}>
+                <div ref={elem => (this.elem = elem)}>
                     {this.props.chatMessages &&
                         this.props.chatMessages
                             .sort((a, b) => a["id"] - b["id"])
@@ -45,16 +45,23 @@ class Chat extends React.Component {
                                                 "/images/placeholder.png"
                                             }
                                         />
-                                        <p>
-                                            {message.first} {message.last}{" "}
-                                            wrote:
-                                        </p>
-                                        <p>"{message.message}"</p>
+                                        <div className="chat-user-message">
+                                            <p>
+                                                <strong>
+                                                    {message.first}{" "}
+                                                    {message.last} wrote:
+                                                </strong>
+                                            </p>
+                                            <p>"{message.message}"</p>
+                                        </div>
                                     </div>
                                 );
                             })}
                 </div>
-                <textarea onKeyDown={this.sendMessage} />
+                <textarea
+                    onKeyDown={this.sendMessage}
+                    placeholder="your message..."
+                />
             </div>
         );
     }

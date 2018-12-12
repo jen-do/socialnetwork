@@ -8,12 +8,12 @@ class OnlineUsers extends React.Component {
     }
     render() {
         return (
-            <div>
+            <div className="opp-container">
                 <h1>Who's online now</h1>
                 {this.props.listUsersOnline &&
                     this.props.listUsersOnline.map((userOnline, index) => {
                         return (
-                            <div key={index}>
+                            <div key={index} className="other-users">
                                 <img
                                     className="friends-pic"
                                     src={
@@ -21,9 +21,9 @@ class OnlineUsers extends React.Component {
                                         "/images/placeholder.png"
                                     }
                                 />
-                                <p>
+                                <h3>
                                     {userOnline.first} {userOnline.last}
-                                </p>
+                                </h3>
                             </div>
                         );
                     })}

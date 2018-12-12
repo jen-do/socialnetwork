@@ -358,7 +358,7 @@ io.on("connection", socket => {
     // chat - data flow #1
     db.getChatMessages()
         .then(lastTenChatMessages => {
-            console.log("results from db query chat:", lastTenChatMessages);
+            // console.log("results from db query chat:", lastTenChatMessages);
             io.sockets.emit("getChatMessages", lastTenChatMessages);
         })
         .catch(err => {
@@ -373,8 +373,9 @@ io.on("connection", socket => {
         ])
             .then(results => {
                 let chatInfo = {
+                    id: results[0][0].id,
                     message: results[0][0].message,
-                    id: results[0][0].sender,
+                    sender: results[0][0].sender,
                     first: results[1][0].first,
                     last: results[1][0].last,
                     image: results[1][0].image
