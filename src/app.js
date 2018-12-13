@@ -147,6 +147,7 @@ export default class App extends React.Component {
                     <Uploader
                         updateProfilePic={this.updateProfilePic}
                         hideUploader={this.hideUploader}
+                        image={this.state.image}
                     />
                 )}
             </div>

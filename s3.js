@@ -41,3 +41,14 @@ exports.upload = function(req, res, next) {
         }
     });
 };
+
+exports.delete = function(req, res, next) {
+    client
+        .del(req.body.amazonString)
+        .on("response", function(res) {
+            console.log(res.statusCode);
+            console.log(res.headers);
+            next();
+        })
+        .end();
+};

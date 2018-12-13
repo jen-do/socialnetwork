@@ -159,6 +159,8 @@ app.post("/upload", uploader.single("file"), s3.upload, (req, res) => {
     )
         .then(results => {
             console.log(results[0].url);
+            req.session.image = results[0].url;
+            console.log("req.session.image", req.session.image);
             res.json({
                 image: results[0].url,
                 success: true
@@ -169,6 +171,29 @@ app.post("/upload", uploader.single("file"), s3.upload, (req, res) => {
             res.json({
                 success: false
             });
+        });
+});
+
+app.post("/deleteimage", s3.delete, (req, res) => {
+    console.log("delete image");
+    res.sendStatus(200);
+});
+
+app.post("/deleteaccount/:id", (req, res) => {
+    console.log(req.params.id);
+    Promise.all([
+        db.deleteAccountFromChat(req.params.id),
+        db.deleteAccountFromFriendships(req.params.id)
+    ])
+        .then(
+            db.deleteAccountFromUsers(req.params.id),
+            res.json({
+                deleted: true
+            }),
+            console.log("account deleted")
+        )
+        .catch(err => {
+            console.log("error in deleting account serverside:", err);
         });
 });
 
@@ -197,7 +222,7 @@ app.get("/user/:id/profile", (req, res) => {
     } else {
         db.getOtherProfiles(req.params.id)
             .then(results => {
-                // console.log("results in getOtherProfiles:", results[0]);
+                console.log("results in getOtherProfiles:", results[0]);
                 res.json({
                     results: results,
                     success: true

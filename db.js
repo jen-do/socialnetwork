@@ -80,6 +80,7 @@ exports.getOtherProfiles = function(id) {
             [id]
         )
         .then(results => {
+            console.log("results from db", results);
             return results.rows;
         });
 };
@@ -217,5 +218,42 @@ exports.getSenderInfo = function(id) {
         )
         .then(results => {
             return results.rows;
+        });
+};
+
+exports.deleteAccountFromChat = function(id) {
+    return db
+        .query(
+            `DELETE FROM chat
+            WHERE sender = $1`,
+            [id]
+        )
+        .then(function() {
+            return;
+        });
+};
+
+exports.deleteAccountFromFriendships = function(id) {
+    return db
+        .query(
+            `DELETE FROM friendships
+            WHERE receiver = $1
+            OR sender = $1`,
+            [id]
+        )
+        .then(function() {
+            return;
+        });
+};
+
+exports.deleteAccountFromUsers = function(id) {
+    return db
+        .query(
+            `DELETE FROM users
+            WHERE id = $1`,
+            [id]
+        )
+        .then(function() {
+            return;
         });
 };

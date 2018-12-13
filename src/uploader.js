@@ -7,11 +7,13 @@ export default class Uploader extends React.Component {
         this.state = {};
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
+        console.log("this.props in uploader: ", this.props);
     }
 
     // storing the uploaded image in state
     handleChange(e) {
         console.log("handlechange runs", e.target.files[0]);
+
         this.setState(
             {
                 [e.target.name]: e.target.files[0]
@@ -24,12 +26,28 @@ export default class Uploader extends React.Component {
         e.preventDefault();
         var formData = new FormData();
         formData.append("file", this.state.file);
+        if (this.props.image !== null) {
+            var amazonUrl = this.props.image;
+            var lastIndex = amazonUrl.lastIndexOf("/");
+            var amazonString = amazonUrl.slice(lastIndex + 1);
+            console.log("amazonString", amazonString);
+        }
         axios
             .post("/upload", formData)
             .then(({ data }) => {
                 console.log("data in upload: ", data);
                 if (data.success) {
                     this.props.updateProfilePic(data.image);
+
+                    axios
+                        .post("/deleteimage", { amazonString })
+                        .then(results => {
+                            console.log(
+                                "results in deleteImage axious uploader:",
+                                results
+                            );
+                        });
+
                     // this.setState({
                     //     image: data.image
                     // });
