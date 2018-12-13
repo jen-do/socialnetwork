@@ -59,6 +59,7 @@ class Chat extends React.Component {
                             })}
                 </div>
                 <textarea
+                    id="chatfield"
                     onKeyDown={this.sendMessage}
                     placeholder="your message..."
                 />

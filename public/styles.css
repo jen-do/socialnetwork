@@ -14,18 +14,19 @@ h3 {
 
 a {
     text-decoration: none;
-    color: #096b82;
+    color: #264e70;
 }
 
 body {
-    background: url("/images/7096.jpg");
+    background: url("/images/76.jpg");
     background-size: cover;
-    background-attachment: scroll;
+    background-attachment: fixed;
 }
 
 h1,
 h2 {
     text-align: center;
+    color: #264e70;
 }
 
 h3 {
@@ -45,7 +46,7 @@ h3 {
     text-align: center;
     padding: 20px;
     margin-top: 50px;
-    border: 2px solid #096b82;
+    border: 2px solid #264e70;
     background: rgba(255, 255, 255, 0.8);
 }
 
@@ -76,22 +77,28 @@ button {
 }
 
 .auth-container button {
-    background: #096b82;
+    background: #264e70;
     color: #fff;
     font-weight: bold;
 }
 
 #friendbutton {
-    background: #5c8d89;
+    background: #264e70;
+    color: #fff;
 }
 
 #endfriendship {
-    background: #db996c;
+    background: #cc510e;
+    color: #fff;
 }
 
 textarea {
     width: 100%;
     height: 150px;
+}
+
+#chatfield {
+    background: #eaeaea;
 }
 
 /* #logout-button {
@@ -107,7 +114,7 @@ textarea {
 
 #header {
     height: 70px;
-    background: #096b82;
+    background: #264e70;
 }
 
 #nav {
@@ -148,15 +155,18 @@ textarea {
     width: 60%;
     margin: 20px auto;
     height: 100%;
+    min-height: 400px;
     background: rgba(255, 255, 255, 0.8);
-    border: 1px solid #096b82;
+    border: 1px solid #264e70;
 }
 
 #profile #profile-pic,
 #opp-pic {
-    /* float: left; */
+    float: left;
     width: 300px;
-    height: auto;
+    height: 300px;
+    object-fit: cover;
+    /* height: auto; */
     border-radius: 0;
     margin-right: 30px;
 }
@@ -188,7 +198,7 @@ textarea {
     text-align: center;
 }
 
-.friends {
+.other-users {
     width: 240px;
     padding: 10px;
     display: inline-flex;
@@ -206,4 +216,5 @@ textarea {
 
 .chat-user-message {
     margin-left: 20px;
+    width: 80%;
 }

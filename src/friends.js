@@ -31,7 +31,7 @@ class Friends extends React.Component {
         );
         return (
             <div>
-                <h2>Your friends</h2>
+                <h1>Your friends</h1>
                 <div id="friends-list">
                     {this.props.friends &&
                         this.props.friends.map(friend => {
@@ -62,7 +62,7 @@ class Friends extends React.Component {
                             );
                         })}
                 </div>
-                <h2>These people want to be your friends</h2>
+                <h1>These people want to be your friends</h1>
                 <div id="wannabe-list">
                     {this.props.wannabes &&
                         this.props.wannabes.map(wannabe => {
