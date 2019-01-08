@@ -18,9 +18,7 @@ a {
 }
 
 body {
-    /* background: url("/images/76.jpg");
-    background-size: cover;
-    background-attachment: fixed; */
+    background: #eaeaea;
 }
 
 h1,
@@ -190,7 +188,7 @@ textarea {
 
 #upload-inner-container {
     padding: 10px;
-    background: #5c8d89;
+    background: #9fbcd6;
     position: absolute;
     width: 60%;
     left: 20%;
