@@ -80,7 +80,6 @@ exports.getOtherProfiles = function(id) {
             [id]
         )
         .then(results => {
-            console.log("results from db", results);
             return results.rows;
         });
 };
@@ -193,7 +192,7 @@ exports.getChatMessages = function() {
     return db
         .query(
             `
-        SELECT chat.id, chat.message, users.first, users.last, users.image
+        SELECT chat.id, chat.message, chat.created_at, users.first, users.last, users.image
         FROM chat
         LEFT JOIN users
         ON chat.sender = users.id
@@ -211,7 +210,7 @@ exports.addNewMessage = function(message, sender) {
             `
         INSERT INTO chat (message, sender)
         VALUES ($1, $2)
-        RETURNING id, message, sender
+        RETURNING id, message, sender, created_at
         `,
             [message || null, sender || null]
         )

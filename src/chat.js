@@ -2,19 +2,33 @@ import React from "react";
 import { connect } from "react-redux";
 import { initSocket } from "./socket";
 import { getChatMessages } from "./actions";
+import moment from "moment";
 
 class Chat extends React.Component {
     constructor() {
         super();
         this.sendMessage = this.sendMessage.bind(this);
+        this.updateTime = this.updateTime.bind(this);
     }
 
     sendMessage(e) {
         let socket = initSocket();
         if (e.which === 13) {
+            // console.log("moment", moment().get("second"));
             socket.emit("newMessage", e.target.value);
             e.target.value = "";
         }
+    }
+
+    componentDidMount() {
+        setInterval(() => this.updateTime(), 60000);
+    }
+
+    updateTime() {
+        this.props.chatMessages.map(message => {
+            moment(message.createdAt).fromNow();
+            return message;
+        });
     }
 
     componentDidUpdate() {
@@ -25,10 +39,6 @@ class Chat extends React.Component {
     // this.elem will give a refernce to this elem throughout the component  (here: the div with class chat-container)
 
     render() {
-        console.log(
-            "this.props.chatMessages in chat component",
-            this.props.chatMessages
-        );
         return (
             <div>
                 <h1>Chat</h1>
@@ -54,6 +64,7 @@ class Chat extends React.Component {
                                                 </strong>
                                             </p>
                                             <p>"{message.message}"</p>
+                                            <p>{message.createdAt}</p>
                                         </div>
                                     </div>
                                 );

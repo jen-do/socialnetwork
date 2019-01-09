@@ -1,7 +1,10 @@
+// ---------- requiring servers
 const express = require("express");
 const app = express();
-const server = require("http").Server(app); // creates an HTTP server and passing it the app express-server, wraps the express-server (express will listen for get and post requests, socket listens for socket requests)
+const server = require("http").Server(app);
 const io = require("socket.io")(server, { origins: "localhost:8080" });
+
+// ---------- requiring other packages and serverside files
 const compression = require("compression");
 const bcrypt = require("./bcrypt");
 const csurf = require("csurf");
@@ -9,8 +12,10 @@ const multer = require("multer");
 const uidSafe = require("uid-safe");
 const path = require("path");
 const s3 = require("./s3.js");
+const moment = require("moment");
 const db = require("./db");
 
+// ---------- middleware
 app.use(express.static("./public"));
 app.use(express.static("./uploads"));
 const cookieSession = require("cookie-session");
@@ -20,10 +25,11 @@ const cookieSessionMiddleware = cookieSession({
 });
 
 app.use(cookieSessionMiddleware);
-// this passes the cookieSession info to server-side socket, so socket has access to session data
+// making session data from cookieSession available to the server-side socket:
 io.use(function(socket, next) {
     cookieSessionMiddleware(socket.request, socket.request.res, next);
 });
+
 const bodyparser = require("body-parser");
 app.use(bodyparser.json());
 
@@ -47,7 +53,6 @@ var uploader = multer({
 });
 // end boilerplate file upload
 
-// csurf comes after bodyPrser and cookieSession
 app.use(csurf());
 
 app.use(function(req, res, next) {
@@ -70,80 +75,67 @@ if (process.env.NODE_ENV != "production") {
 
 //////////////// register + login routes ////////////////
 
-app.post("/registration", (req, res) => {
-    // console.log("req.body in /registration: ", req.body);
-    bcrypt
-        .hash(req.body.pass)
-        .then(hash => {
-            db.register(req.body.first, req.body.last, req.body.email, hash)
-                .then(results => {
-                    console.log(results);
-                    req.session.id = results[0].id;
-                    req.session.first = results[0].first;
-                    res.json({
-                        success: true
-                    });
-                })
-                .catch(err => {
-                    console.log("error in POST /registration: ", err);
-                    res.json({
-                        success: false
-                    });
-                });
-        })
-        .catch(err => {
-            console.log("error in POST /registration: ", err);
-            res.json({
-                success: false
-            });
+app.post("/registration", async (req, res) => {
+    try {
+        const hash = await bcrypt.hash(req.body.pass);
+        const results = await db.register(
+            req.body.first,
+            req.body.last,
+            req.body.email,
+            hash
+        );
+        req.session.id = results[0].id;
+        req.session.first = results[0].first;
+        res.json({
+            success: true
         });
+    } catch (err) {
+        console.log("error in POST /registration: ", err);
+        res.json({
+            success: false
+        });
+    }
 });
 
-app.post("/login", (req, res) => {
-    console.log(req.body);
-    db.login(req.body.email)
-        .then(results => {
-            if (results.length == 0) {
-                throw new Error("no such email registered");
-            }
-            bcrypt
-                .compare(req.body.pass, results[0].pass)
-                .then(matches => {
-                    if (matches) {
-                        console.log("passwords do match");
-                        req.session.id = results[0].id;
-                        req.session.first = results[0].first;
-                        console.log("sessioncookie login", req.session.id);
-                        res.json({
-                            success: true
-                        });
-                    } else {
-                        res.json({
-                            success: false
-                        });
-                    }
-                })
-                .catch(err => {
-                    console.log("error in POST /login: ", err);
-                    res.json({
-                        success: false
-                    });
+// login - checking 1) if email is registered, 2) if passwords do match
+app.post("/login", async (req, res) => {
+    try {
+        const results = await db.login(req.body.email);
+        if (results.length == 0) {
+            throw new Error("no such email registered");
+        } else {
+            const matches = await bcrypt.compare(
+                req.body.pass,
+                results[0].pass
+            );
+            if (matches) {
+                console.log("passwords do match");
+                req.session.id = results[0].id;
+                req.session.first = results[0].first;
+                res.json({
+                    success: true
                 });
-        })
-        .catch(err => {
-            console.log("error in POST /login: ", err);
-            res.json({
-                success: false
-            });
+            } else {
+                console.log("password do not match");
+                res.json({
+                    success: false
+                });
+            }
+        }
+    } catch (err) {
+        console.log("error in POST /login: ", err);
+        res.json({
+            success: false
         });
+    }
 });
 
 //////////////// profile / bio routes ////////////////
 
+// profile
 app.get("/user", (req, res) => {
     db.getUserInfo(req.session.id)
         .then(results => {
-            // console.log("results in getUserinfo: ", results);
             res.json(results[0]);
         })
         .catch(err => {
@@ -151,36 +143,34 @@ app.get("/user", (req, res) => {
         });
 });
 
+// image upload
 app.post("/upload", uploader.single("file"), s3.upload, (req, res) => {
-    console.log("req.file in POST /upload", req.file, req.body);
     db.uploadProfilePic(
         req.session.id,
         "https://s3.amazonaws.com/spicedling/" + req.file.filename
     )
         .then(results => {
-            console.log(results[0].url);
             req.session.image = results[0].url;
-            console.log("req.session.image", req.session.image);
             res.json({
                 image: results[0].url,
                 success: true
             });
         })
         .catch(err => {
-            console.log("error in POST /uploads if statement: ", err);
+            console.log("error in POST /uploads: ", err);
             res.json({
                 success: false
             });
         });
 });
 
+// image and account deletion
 app.post("/deleteimage", s3.delete, (req, res) => {
-    console.log("delete image");
+    console.log("image deleted");
     res.sendStatus(200);
 });
 
 app.post("/deleteaccount/:id", (req, res) => {
-    console.log(req.params.id);
     Promise.all([
         db.deleteAccountFromChat(req.params.id),
         db.deleteAccountFromFriendships(req.params.id)
@@ -193,22 +183,21 @@ app.post("/deleteaccount/:id", (req, res) => {
             console.log("account deleted")
         )
         .catch(err => {
-            console.log("error in deleting account serverside:", err);
+            console.log("error in /deleteaccount serverside:", err);
         });
 });
 
+// adding and updating own bio
 app.post("/bio", (req, res) => {
-    console.log(req.body);
     db.setBio(req.session.id, req.body.bio)
         .then(results => {
-            // console.log("results in updating bio in db: ", results);
             res.json({
                 bio: results[0].bio,
                 success: true
             });
         })
         .catch(err => {
-            console.log("error in updating bio in db : ", err);
+            console.log("error in updating bio: ", err);
             res.json({
                 success: false
             });
@@ -217,21 +206,20 @@ app.post("/bio", (req, res) => {
 
 //////// routes for other users' profiles + user search ////////
 
+// viewing other users' profile pages
 app.get("/user/:id/profile", (req, res) => {
-    // console.log("req.params.id in GET opp:", req.params.id);
     if (req.params.id == req.session.id) {
         res.redirect("/");
     } else {
         db.getOtherProfiles(req.params.id)
             .then(results => {
-                console.log("results in getOtherProfiles:", results[0]);
                 res.json({
                     results: results,
                     success: true
                 });
             })
             .catch(err => {
-                console.log("error in getting other peoples profiles: ", err);
+                console.log("error in getting other person's profile: ", err);
                 res.json({
                     success: false
                 });
@@ -239,10 +227,10 @@ app.get("/user/:id/profile", (req, res) => {
     }
 });
 
+// search for other users on the network
 app.get("/search/:username", (req, res) => {
     db.searchUsers(req.params.username, req.session.id)
         .then(results => {
-            console.log("results in db.searchUsers", results);
             if (!results.length > 0) {
                 res.json({
                     results: results,
@@ -256,7 +244,7 @@ app.get("/search/:username", (req, res) => {
             }
         })
         .catch(err => {
-            console.log("err in db.userSearch", err);
+            console.log("err in /search serverside: ", err);
         });
 });
 
@@ -265,7 +253,6 @@ app.get("/search/:username", (req, res) => {
 app.get("/friends/:id", (req, res) => {
     db.checkFriendship(req.params.id, req.session.id)
         .then(results => {
-            // console.log("results in GET checkFrienship serverside: ", results);
             if (!results.length > 0) {
                 res.json({
                     noRelationship: true
@@ -285,18 +272,17 @@ app.post("/friendrequest/:id", (req, res) => {
             res.json(results[0]);
         })
         .catch(err => {
-            console.log("error in POST makeFriendRequest serverside:", err);
+            console.log("error in POST /makeFriendRequest serverside:", err);
         });
 });
 
 app.post("/acceptfriendrequest/:id", (req, res) => {
     db.acceptFriendRequest(req.session.id, req.params.id)
         .then(results => {
-            // console.log(results);
             res.json(results[0]);
         })
         .catch(err => {
-            console.log("error in POST acceptFriendRequest serverside:", err);
+            console.log("error in POST /acceptFriendRequest serverside:", err);
         });
 });
 
@@ -310,7 +296,7 @@ app.post("/endfriendship/:id", (req, res) => {
             });
         })
         .catch(err => {
-            console.log("error in POST endFrienship serverside:", err);
+            console.log("error in POST /endFrienship serverside:", err);
         });
 });
 
@@ -319,11 +305,10 @@ app.post("/endfriendship/:id", (req, res) => {
 app.get("/listfriendsandwannabes", (req, res) => {
     db.getFriendsAndWannabes(req.session.id)
         .then(results => {
-            console.log("results in getFriendsAndWannabes serverside", results);
             res.json(results);
         })
         .catch(err => {
-            console.log("error in getFriendsAndWannabes serverside:", err);
+            console.log("error in /getFriendsAndWannabes serverside:", err);
         });
 });
 
@@ -350,27 +335,28 @@ app.get("*", function(req, res) {
     }
 });
 
+// server will listen for both HTTP and sockets requests
 server.listen(8080, function() {
     console.log("I'm listening.");
-}); // server will listen for both HTTP and sockets requests
+});
 
-/////////////////////////////////////////////////////////////////////////////
-////////// put all of server-side socket code below server.listen ///////////
-/////////////////////////////////////////////////////////////////////////////
+// ---------- server-side socket code:
 
-// onlineUsers obj will be responsible for maintaining a list of everyone who's currently online - left socketId, right userId
+//////////////// who's online now ////////////////
+
+// onlineUsers contains a list of everyone currently online (their socket.id : their userId)
 let onlineUsers = {};
 
 io.on("connection", socket => {
-    console.log(`user with socket id ${socket.id} just connected`);
+    // console.log(`user with socket id ${socket.id} just connected`);
     let socketId = socket.id;
     let userId = socket.request.session.id;
     onlineUsers[socketId] = userId;
-    console.log("onlineUsers: ", onlineUsers);
 
-    let arrayOfIds = Object.values(onlineUsers); // will extract every value from onlineUsers and store it in an array
-    console.log("arrayOfIds", arrayOfIds);
+    // extracting the userIds from onlineUsers for the following DB queries
+    let arrayOfIds = Object.values(onlineUsers);
 
+    // get list of all users currently online
     db.getUsersByIds(arrayOfIds)
         .then(results => {
             socket.emit("onlineUsers", results.rows);
@@ -382,8 +368,8 @@ io.on("connection", socket => {
             );
         });
 
-    console.log("ID of user just joined", arrayOfIds.slice(-1)[0]);
-
+    // updating the list of online users when a new person logs in
+    console.log("ID of the user who joined", arrayOfIds.slice(-1)[0]);
     if (arrayOfIds.indexOf(userId) == arrayOfIds.length - 1) {
         var newUser = arrayOfIds.slice(-1)[0];
         db.getUserWhoJoined(newUser)
@@ -395,49 +381,60 @@ io.on("connection", socket => {
             });
     }
 
+    // updating the list of online users when a person logs out
     socket.on("disconnect", function() {
         delete onlineUsers[socket.id];
-        // console.log(`socket with id ${socket.id} just disconnected`, userId);
         if (!Object.values(onlineUsers).includes(userId)) {
             io.sockets.emit("userLeft", userId);
         }
     });
 
-    // chat - data flow #1
+    //////////////// chat ////////////////
+
+    // get chat messages / timestamp formatting with moment.js
     db.getChatMessages()
         .then(lastTenChatMessages => {
-            // console.log("results from db query chat:", lastTenChatMessages);
+            lastTenChatMessages.map(message => {
+                // console.log("each message", message.created_at);
+                message.createdAt = moment(message.created_at).fromNow();
+                // console.log("each message", message.createdAt);
+                return message;
+            });
             io.sockets.emit("getChatMessages", lastTenChatMessages);
         })
         .catch(err => {
-            console.log("error in getChatMessages in index.js:", err);
+            console.log("error in getChatMessages serverside:", err);
         });
 
-    // chat - data flow #2
+    // add a message to the chat / timestamp formating with moment.js
     socket.on("newMessage", message => {
         Promise.all([
             db.addNewMessage(message, userId),
             db.getSenderInfo(userId)
         ])
             .then(results => {
+                results[0].map(message => {
+                    message.created_at = moment(message.created_at).fromNow();
+                    return message;
+                });
+
                 let chatInfo = {
                     id: results[0][0].id,
                     message: results[0][0].message,
                     sender: results[0][0].sender,
+                    createdAt: results[0][0].created_at,
                     first: results[1][0].first,
                     last: results[1][0].last,
                     image: results[1][0].image
                 };
-                console.log("chatInfo", chatInfo);
+
                 io.sockets.emit("addNewMessage", chatInfo);
             })
             .catch(err => {
-                console.log("error in addChatMessage in index.js:", err);
+                console.log(
+                    "error in adding a new chat message serverside:",
+                    err
+                );
             });
     });
-
-    // send message from server to client, pass emit() 2 arguments: 1) name of message, 2) any data we want to send as part of the message (data can be any result from db query, API query, normal array, obj, string, int ...):
-    // db.getUser(userId).then(results => {
-    //     socket.emit("catnip", result);
-    // });
 });
