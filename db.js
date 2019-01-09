@@ -85,6 +85,20 @@ exports.getOtherProfiles = function(id) {
         });
 };
 
+exports.searchUsers = function(usertosearch, self) {
+    return db
+        .query(
+            `SELECT * FROM users
+            WHERE first LIKE $1 || '%' AND id != $2
+            OR last LIKE  $1 || '%' AND id !=$2
+            `,
+            [usertosearch, self]
+        )
+        .then(results => {
+            return results.rows;
+        });
+};
+
 exports.checkFriendship = function(user_one, user_two) {
     return db
         .query(

@@ -90,6 +90,12 @@ export default function reducer(state = {}, action) {
                 state.chatMessages.concat(action.newMessage)
         };
     }
+    if (action.type == "USER_SEARCH") {
+        // console.log("user search in reducer: ", action.users, action.noResults);
+        var resultsFromUserSearch = action.users;
+        var noResults = action.noResults;
+        return { ...state, resultsFromUserSearch, noResults };
+    }
 
     return state;
 }

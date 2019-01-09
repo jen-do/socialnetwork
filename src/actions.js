@@ -69,3 +69,13 @@ export async function addNewMessage(newMessage) {
         newMessage: newMessage
     };
 }
+
+export async function searchUsers(username) {
+    const { data } = await axios.get("/search/" + username);
+    // console.log("data in axios GET for user search: ", data);
+    return {
+        type: "USER_SEARCH",
+        users: data.results,
+        noResults: data.noSearchResults
+    };
+}

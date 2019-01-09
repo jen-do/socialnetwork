@@ -215,6 +215,8 @@ app.post("/bio", (req, res) => {
         });
 });
 
+//////// routes for other users' profiles + user search ////////
+
 app.get("/user/:id/profile", (req, res) => {
     // console.log("req.params.id in GET opp:", req.params.id);
     if (req.params.id == req.session.id) {
@@ -235,6 +237,27 @@ app.get("/user/:id/profile", (req, res) => {
                 });
             });
     }
+});
+
+app.get("/search/:username", (req, res) => {
+    db.searchUsers(req.params.username, req.session.id)
+        .then(results => {
+            console.log("results in db.searchUsers", results);
+            if (!results.length > 0) {
+                res.json({
+                    results: results,
+                    noSearchResults: true
+                });
+            } else {
+                res.json({
+                    results: results,
+                    noSearchResults: false
+                });
+            }
+        })
+        .catch(err => {
+            console.log("err in db.userSearch", err);
+        });
 });
 
 //////////////// friendship button routes ////////////////
