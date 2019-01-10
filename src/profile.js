@@ -1,6 +1,6 @@
 import React from "react";
-import ProfilePic from "./profilepic";
 import axios from "./axios";
+import ProfilePic from "./profilepic";
 import Bio from "./bio";
 
 export default class Profile extends React.Component {
@@ -10,28 +10,29 @@ export default class Profile extends React.Component {
         this.deleteAccount = this.deleteAccount.bind(this);
     }
 
-    deleteAccount() {
-        console.log("this.props in profile", this.props);
-        if (this.props.image !== null) {
-            var amazonUrl = this.props.image;
-            var lastIndex = amazonUrl.lastIndexOf("/");
-            var amazonString = amazonUrl.slice(lastIndex + 1);
-            console.log("amazonString", amazonString);
-        }
+    // extracting the path of the image url stored at AWS
+    // deleting 1) the image from amazon and 2) the user account
+    async deleteAccount() {
+        try {
+            if (this.props.image !== null) {
+                var amazonUrl = this.props.image;
+                var lastIndex = amazonUrl.lastIndexOf("/");
+                var amazonString = amazonUrl.slice(lastIndex + 1);
+                // console.log("amazonString", amazonString);
+            }
 
-        axios
-            .post("/deleteimage", { amazonString })
-            .then(
-                axios.post("deleteaccount/" + this.props.id).then(resp => {
-                    if (resp.data.deleted) {
-                        location.replace("/logout");
-                    }
-                })
-            )
-
-            .catch(err => {
-                console.log("error in axios POST /deleteaccount", err);
+            const deleteImage = await axios.post("/deleteimage", {
+                amazonString
             });
+            const deleteAccount = await axios.post(
+                "deleteaccount/" + this.props.id
+            );
+            if (deleteAccount.data.deleted) {
+                location.replace("/logout");
+            }
+        } catch (err) {
+            console.log("error in axios POST /deleteaccount", err);
+        }
     }
 
     render() {

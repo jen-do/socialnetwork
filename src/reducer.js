@@ -1,16 +1,10 @@
 export default function reducer(state = {}, action) {
     if (action.type == "GET_FRIENDS_AND_WANNABES") {
-        // console.log("action.list in reducer", action.list);
         var list = action.list;
 
         return { ...state, list };
     }
     if (action.type == "ACCEPT") {
-        // console.log(
-        //     "ACCEPT action.list in reducer",
-        //     action.sender,
-        //     action.accepted
-        // );
         state = {
             ...state,
             list:
@@ -28,7 +22,6 @@ export default function reducer(state = {}, action) {
         };
     }
     if (action.type == "END") {
-        // console.log("END in reducer", action);
         state = {
             ...state,
             list:
@@ -49,12 +42,10 @@ export default function reducer(state = {}, action) {
         };
     }
     if (action.type == "ONLINE_USERS_LIST") {
-        // console.log("ONLINE_USERS_LIST in reducer", action);
         var listOfUsersOnline = action.onlineUsers;
         return { ...state, listOfUsersOnline };
     }
     if (action.type == "USER_WHO_JOINED") {
-        // console.log("USER_WHO_JOINED", action.newUser);
         var newUser = action.newUser;
         return (state = {
             ...state,
@@ -64,8 +55,6 @@ export default function reducer(state = {}, action) {
         });
     }
     if (action.type == "USER_WHO_LEFT") {
-        // console.log("Id of userwhoLeft in reducer: ", action.userLeft);
-        // var userLeft = action.userLeft;
         return (state = {
             ...state,
             listOfUsersOnline:
@@ -82,7 +71,6 @@ export default function reducer(state = {}, action) {
         };
     }
     if (action.type == "NEW_MESSAGE") {
-        console.log("newMessage in reducer", action.newMessage);
         return {
             ...state,
             chatMessages:
@@ -91,7 +79,6 @@ export default function reducer(state = {}, action) {
         };
     }
     if (action.type == "USER_SEARCH") {
-        // console.log("user search in reducer: ", action.users, action.noResults);
         var resultsFromUserSearch = action.users;
         var noResults = action.noResults;
         return { ...state, resultsFromUserSearch, noResults };

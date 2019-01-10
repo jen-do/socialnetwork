@@ -18,6 +18,7 @@ const db = require("./db");
 // ---------- middleware
 app.use(express.static("./public"));
 app.use(express.static("./uploads"));
+
 const cookieSession = require("cookie-session");
 const cookieSessionMiddleware = cookieSession({
     secret: `I'm always angry.`,
@@ -395,7 +396,6 @@ io.on("connection", socket => {
     db.getChatMessages()
         .then(lastTenChatMessages => {
             lastTenChatMessages.map(message => {
-                // console.log("each message", message.created_at);
                 message.createdAt = moment(message.created_at).fromNow();
                 // console.log("each message", message.createdAt);
                 return message;

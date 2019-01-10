@@ -1,5 +1,8 @@
 import React from "react";
 import axios from "./axios";
+import { BrowserRouter, Route } from "react-router-dom";
+import { Link } from "react-router-dom";
+
 import Logo from "./logo";
 import ProfilePic from "./profilepic";
 import Uploader from "./uploader";
@@ -9,8 +12,6 @@ import Friends from "./friends";
 import OnlineUsers from "./onlineusers";
 import Chat from "./chat";
 import Search from "./search";
-import { BrowserRouter, Route } from "react-router-dom";
-import { Link } from "react-router-dom";
 
 export default class App extends React.Component {
     constructor() {
@@ -24,13 +25,19 @@ export default class App extends React.Component {
         this.setBio = this.setBio.bind(this);
     }
 
-    showUploader() {
-        this.setState(
-            {
-                uploaderIsVisible: true
+    componentDidMount() {
+        axios.get("/user").then(
+            ({ data }) => {
+                this.setState(data);
             },
-            () => console.log("this.state in showUploader", this.state)
+            () => console.log("data", this.state)
         );
+    }
+
+    showUploader() {
+        this.setState({
+            uploaderIsVisible: true
+        });
     }
 
     hideUploader() {
@@ -41,42 +48,23 @@ export default class App extends React.Component {
 
     updateProfilePic(imgUrl) {
         console.log("updateProfilePic: ", this.state.image);
-        this.setState(
-            {
-                image: imgUrl,
-                uploaderIsVisible: false
-            },
-            () => console.log("this.state in updateProfilePic", this.state)
-        );
+        this.setState({
+            image: imgUrl,
+            uploaderIsVisible: false
+        });
     }
 
     setBio(bio) {
-        this.setState(
-            {
-                bio: bio,
-                editorIsVisible: false
-            },
-            () => console.log("this.state in setBio: ", this.state)
-        );
+        this.setState({
+            bio: bio,
+            editorIsVisible: false
+        });
     }
 
     logout() {
         this.props.history.push("/logout");
     }
 
-    // #2 componentDidMount runs
-    // built-in lifecyle method componentDidMount: similar to mounted function in Vue, runs when HTML loaded; axios GET requests for info needed from the server to correctly render the content go here
-    // React lifecyle methods don't have to be bound
-    componentDidMount() {
-        axios.get("/user").then(
-            ({ data }) => {
-                this.setState(data);
-            },
-            () => console.log("data", this.state)
-        );
-    }
-
-    // #1 first the render function runs
     render() {
         return (
             <div>

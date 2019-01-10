@@ -8,7 +8,6 @@ export default class Bio extends React.Component {
         this.state = {
             editorIsVisible: false
         };
-        console.log("props in bio: ", props);
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
         this.showEditor = this.showEditor.bind(this);
@@ -23,33 +22,27 @@ export default class Bio extends React.Component {
         );
     }
 
-    handleSubmit(e) {
+    async handleSubmit(e) {
         e.preventDefault();
-        axios
-            .post("/bio", this.state)
-            .then(({ data }) => {
-                console.log("resp in axios POST bio:", data);
-                if (data.success) {
-                    this.props.setBio(data.bio);
-                    this.setState({
-                        editorIsVisible: false
-                    });
-                } else {
-                    console.log("error in axios POST bio else", error);
-                }
-            })
-            .catch(err => {
-                console.log("error in axios POST bio catch:", err);
-            });
+        try {
+            const { data } = await axios.post("/bio", this.state);
+            if (data.success) {
+                this.props.setBio(data.bio);
+                this.setState({
+                    editorIsVisible: false
+                });
+            } else {
+                console.log("error in axios POST bio else", error);
+            }
+        } catch (err) {
+            console.log("error in axios POST bio catch:", err);
+        }
     }
 
     showEditor() {
-        this.setState(
-            {
-                editorIsVisible: true
-            },
-            () => console.log("this.state in showEditor", this.state)
-        );
+        this.setState({
+            editorIsVisible: true
+        });
     }
 
     render() {

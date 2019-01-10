@@ -11,9 +11,8 @@ function wrapAuth(Component, url) {
             super(props);
             this.state = {};
             this.url = url;
-            // this.handleChange = this.handleChange.bind(this);
-            // this.handleSubmit = this.handleSubmit.bind(this);
         }
+
         handleChange(e) {
             console.log("handlechange running!", e.target.name);
             this.setState(
@@ -23,6 +22,7 @@ function wrapAuth(Component, url) {
                 () => console.log("this state in handleChange: ", this.state)
             );
         }
+
         handleSubmit(e) {
             e.preventDefault();
             axios

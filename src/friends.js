@@ -5,7 +5,6 @@ import {
     acceptFriendRequest,
     endFriendship
 } from "./actions";
-// import { Link } from "react-router-dom";
 
 class Friends extends React.Component {
     constructor() {
@@ -14,7 +13,6 @@ class Friends extends React.Component {
     }
 
     componentDidMount() {
-        // call dispatch function for getting the complete list of friends and wannabes (action getFriendsAndWannabes)
         this.props.dispatch(getFriendsAndWannabes());
     }
 
@@ -23,12 +21,6 @@ class Friends extends React.Component {
     }
 
     render() {
-        console.log(
-            "this.props.friends and this.props.wannabes",
-            this.props,
-            this.props.friends,
-            this.props.wannabes
-        );
         return (
             <div>
                 <h1>Your friends</h1>
@@ -102,7 +94,6 @@ class Friends extends React.Component {
 
 function mapStateToProps(state) {
     var list = state.list;
-    console.log("list in friends.js", list);
     return {
         friends:
             list &&

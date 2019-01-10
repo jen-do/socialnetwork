@@ -12,7 +12,6 @@ export default class OtherPersonProfile extends React.Component {
         axios
             .get("/user/" + this.props.match.params.id + "/profile")
             .then(({ data }) => {
-                console.log("data.results:", data.results);
                 if (data.success) {
                     this.setState(data.results[0]);
                 }
@@ -21,7 +20,7 @@ export default class OtherPersonProfile extends React.Component {
                 }
             })
             .catch(err => {
-                console.log("error in axios GET other peoples profiles", err);
+                console.log("error in axios GET other person's profile", err);
                 this.props.history.push("/");
             });
     }
@@ -30,7 +29,6 @@ export default class OtherPersonProfile extends React.Component {
         return (
             <div className="content-component">
                 <h1 className="centered-text">Other Profiles</h1>
-
                 <img
                     id="opp-pic"
                     src={this.state.image || "/images/placeholder.png"}

@@ -5,7 +5,7 @@ let secrets;
 if (process.env.NODE_ENV == "production") {
     secrets = process.env; // in prod the secrets are environment variables
 } else {
-    secrets = require("./secrets"); // secrets.json is in .gitignore
+    secrets = require("./secrets"); // otherwise the secrets are stored in secrets.json
 }
 
 const client = knox.createClient({

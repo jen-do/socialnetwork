@@ -33,7 +33,6 @@ class OnlineUsers extends React.Component {
 }
 
 function mapStateToProps(state) {
-    // console.log("state in mapStatetoProps", state.listOfUsersOnline);
     return {
         listUsersOnline: state.listOfUsersOnline
     };

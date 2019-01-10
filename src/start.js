@@ -16,11 +16,11 @@ const store = createStore(
 
 let component;
 
+// rendering either Welcome (login or registration) or logged-in section contained in App
+// App and all of its child components will have access to Redux
 if (location.pathname == "/welcome") {
-    // render welcome screen with registration OR login
     component = <Welcome />;
 } else {
-    // render logged-in section, App and everything contained in App will have access to Redux, add initSocket(store) to be able to access the dispatch method in socket.js (outside of a component)
     component = (initSocket(store),
     (
         <Provider store={store}>
@@ -29,5 +29,4 @@ if (location.pathname == "/welcome") {
     ));
 }
 
-// ReactDOM.render should only be called once in all of the code
 ReactDOM.render(component, document.querySelector("main"));
