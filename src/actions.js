@@ -64,10 +64,22 @@ export function addNewMessage(newMessage) {
 }
 
 export async function searchUsers(username) {
-    const { data } = await axios.get("/search/" + username);
+    try {
+        const { data } = await axios.get("/search/" + username);
+        return {
+            type: "USER_SEARCH",
+            users: data.results,
+            noResults: data.noSearchResults
+        };
+    } catch (err) {
+        console.log("error in searchUsers", error);
+    }
+}
+
+export function clearStateInSearch() {
     return {
         type: "USER_SEARCH",
-        users: data.results,
-        noResults: data.noSearchResults
+        users: null,
+        noResults: null
     };
 }

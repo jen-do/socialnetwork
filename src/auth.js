@@ -67,7 +67,7 @@ function LoginForm({ handleChange, handleSubmit, error }) {
                     Something went wrong. Please try again.
                 </div>
             )}
-            <form onSubmit={handleSubmit} id="auth">
+            <form onSubmit={handleSubmit} id="auth" autoComplete="off">
                 <input
                     name="email"
                     type="email"
@@ -96,7 +96,7 @@ function RegistrationForm({ handleChange, handleSubmit, error }) {
                     Something went wrong. Please try again.
                 </div>
             )}
-            <form onSubmit={handleSubmit} id="auth">
+            <form onSubmit={handleSubmit} id="auth" autoComplete="off">
                 <input
                     onChange={handleChange}
                     name="first"

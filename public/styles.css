@@ -4,32 +4,181 @@
     padding: 0;
 }
 
+body {
+    /* background: #ebf0f6; */
+    background: #faf9f0;
+    font-family: "Raleway", sans-serif;
+    font-size: 0.9em;
+}
+
 h1,
 h2,
 h3 {
     font-family: "Oswald", sans-serif;
     font-weight: 500;
-    margin-bottom: 10px;
-}
-
-a {
-    text-decoration: none;
-    color: #264e70;
-}
-
-body {
-    background: #eaeaea;
+    margin: 0.8em 0;
 }
 
 h1,
 h2 {
     text-align: center;
-    color: #264e70;
+    color: #005874;
 }
 
 h3 {
     margin-top: 10px;
 }
+
+a {
+    text-decoration: none;
+    color: #005874;
+}
+
+hr {
+    width: 50%;
+    margin: 0 auto;
+}
+
+/* header and nav */
+
+#header {
+    height: 70px;
+    background: #005874;
+    display: flex;
+    justify-content: space-between;
+    position: fixed;
+    z-index: 1;
+    width: 100%;
+}
+
+#nav {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    position: fixed;
+    top: 70px;
+    left: 0;
+}
+
+.navitem {
+    font-weight: 500;
+    color: #faf9f0;
+    width: 150px;
+    padding: 15px 10px;
+    background: #1c819e;
+    text-align: left;
+    font-family: "Oswald", sans-serif;
+    z-index: 10;
+}
+
+.navitem:hover {
+    background: #005874;
+    transition: 1s ease-in;
+}
+
+/* logo and profile picture */
+
+#logo,
+#profile-pic,
+#menu-img {
+    margin: 10px;
+    cursor: pointer;
+}
+
+#logo {
+    float: left;
+    height: 50px;
+}
+
+#profile-pic {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+#profile #profile-pic {
+    /* float: left; */
+    width: 250px;
+    height: 250px;
+    object-fit: cover;
+    /* height: auto; */
+    /* border-radius: 0; */
+    /* margin-right: 30px; */
+}
+
+.friends-pic,
+#uploader-img {
+    width: 200px;
+    height: 200px;
+    object-fit: cover;
+    border-radius: 50%;
+}
+
+.chat-message-container #profile-pic {
+    width: 80px;
+    height: 80px;
+}
+
+/* image upload */
+
+#upload-outer-container {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    background: rgba(0, 0, 0, 0.6);
+}
+
+#upload-inner-container {
+    padding: 10px;
+    /* background: #4681a6; */
+    background: #005874;
+    position: absolute;
+    width: 60%;
+    left: 20%;
+    top: 20%;
+    text-align: center;
+    border-radius: 20px;
+}
+
+#close-img {
+    float: right;
+    margin: 1%;
+}
+
+#upload-inner-container h1 {
+    color: #faf9f0;
+    clear: both;
+}
+
+#upload-inner-container button {
+    border: 1px solid #faf9f0;
+}
+
+label > input[type="file"] {
+    display: none;
+}
+
+#custom-file-upload {
+    display: inline-block;
+    font-weight: 500;
+    text-align: center;
+    cursor: pointer;
+    border: 1px solid #faf9f0;
+    border-radius: 20px;
+    color: #faf9f0;
+    width: 150px;
+    padding: 5px;
+}
+
+#uploader-img {
+}
+
+/* registration and login */
 
 .welcome-container {
     width: 100%;
@@ -43,7 +192,7 @@ h3 {
 .auth-container {
     text-align: center;
     padding: 20px;
-    margin-top: 50px;
+    /* margin-top: 50px; */
     border: 2px solid #264e70;
     background: rgba(255, 255, 255, 0.8);
 }
@@ -53,13 +202,11 @@ h3 {
     font-weight: bold;
 }
 
+/* form fields and buttons */
+
 form {
     display: flex;
     flex-direction: column;
-}
-
-.auth-container form,
-#upload-inner-container form {
     align-items: center;
 }
 
@@ -67,11 +214,39 @@ input,
 button {
     padding: 5px;
     margin: 15px 0;
+    text-align: center;
+    font-family: "Raleway", sans-serif;
+}
+
+textarea {
+    font-family: "Raleway", sans-serif;
+    width: 100%;
+    height: 150px;
+    padding: 3%;
+    border-radius: 20px;
+    border: none;
+}
+
+input:focus,
+textarea:focus {
+    outline: 0;
+    box-shadow: 0 0 5px rgba(28, 129, 158, 1);
+    border: 0.5px solid rgba(28, 129, 158, 1);
+    border-radius: 20px;
+    transition: border-radius linear 0.5s;
 }
 
 button {
     width: 150px;
     border: none;
+    background: #005874;
+    color: #fff;
+    border-radius: 20px;
+}
+
+.pre-wrap {
+    white-space: pre-wrap;
+    margin-bottom: 15px;
 }
 
 .auth-container button {
@@ -90,129 +265,114 @@ button {
     color: #fff;
 }
 
-textarea {
-    width: 100%;
-    height: 150px;
-}
-
 #chatfield {
     background: #eaeaea;
+    border-radius: 20px;
 }
 
-/* #logout-button {
-    position: absolute;
-    right: 10px;
-    bottom: 10px;
-    padding: 10px;
-    background: #5c8d89;
-    border-radius: 5px;
-    color: #f9f8eb;
-    font-weight: bold;
+/* #search {
+    background-image: url("images/search.svg");
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: 3% 0;
+    background-color: #fff;
+    border: 1px solid #eaeaea;
+}
+
+#search:focus {
+    background: #fff;
 } */
 
-#header {
-    height: 70px;
-    background: #264e70;
-}
-
-#nav {
-    display: flex;
-    justify-content: flex-end;
-    align-items: center;
-}
-
-.navitem {
-    font-weight: bold;
-    color: #f9f8eb;
-    margin: 0 20px;
-}
-
-#logo,
-#profile-pic {
-    margin: 10px;
-    cursor: pointer;
-}
-
-#logo {
-    float: left;
-    height: 50px;
-}
-
-#profile-pic {
-    /* float: right; */
-    width: 50px;
-    height: 50px;
-    cursor: pointer;
-    border-radius: 50%;
-    object-fit: cover;
-}
+/* content - containers */
 
 .content-container {
     clear: both;
     padding: 10px;
-    width: 60%;
-    margin: 20px auto;
+    width: 70%;
+    margin: 0 auto;
+    position: relative;
+    top: 70px;
     height: 100%;
-    min-height: 400px;
-    background: rgba(255, 255, 255, 0.8);
-    border: 1px solid #264e70;
-}
-
-#profile #profile-pic,
-#opp-pic {
-    float: left;
-    width: 300px;
-    height: 300px;
-    object-fit: cover;
-    /* height: auto; */
-    border-radius: 0;
-    margin-right: 30px;
-}
-
-.friends-pic {
-    width: 100px;
-    height: 100px;
-    object-fit: cover;
-}
-
-#upload-outer-container {
-    position: fixed;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    z-index: 1;
-    background: rgba(0, 0, 0, 0.6);
-}
-
-#upload-inner-container {
-    padding: 10px;
-    background: #9fbcd6;
-    position: absolute;
-    width: 60%;
-    left: 20%;
-    top: 20%;
+    /* min-height: 400px; */
     text-align: center;
+    /* background: rgba(255, 255, 255, 0.8);
+    border: 1px solid #264e70; */
+}
+
+#profile {
+    width: 50%;
+    margin: 0 auto;
 }
 
 .other-users {
     width: 240px;
-    padding: 10px;
+    padding: 30px 10px;
     display: inline-flex;
     flex-direction: column;
     align-items: center;
 }
 
-.chat-message {
+/* search */
+
+/* #search-container {
+    display: inline;
+}
+
+#search-img {
+    height: 20px;
+    margin: 25px 10px;
+} */
+
+/* chat */
+
+.chat-message-container {
     display: flex;
     border: 1px solid #eaeaea;
     background: #fff;
     margin: 10px 0;
     padding: 10px;
+    border-radius: 20px;
 }
 
-.chat-user-message {
+.chat-message-text {
     margin-left: 20px;
     width: 80%;
+    text-align: left;
+}
+
+.chat-message-text p {
+    margin: 10px 0;
+}
+
+/* media queries */
+
+@media screen and (max-width: 480px) {
+    .content-container {
+        width: 100%;
+    }
+    #profile {
+        width: 100%;
+    }
+    .other-users {
+        width: 100%;
+        margin: 20px 0;
+    }
+    .chat-message-container {
+        padding: 1%;
+    }
+    .chat-message-container #profile-pic {
+        width: 50px;
+        height: 50px;
+    }
+    .chat-message-text {
+        margin-left: 0;
+    }
+    #nav {
+        width: 100%;
+    }
+    .navitem {
+        width: 100%;
+        font-size: 1.3em;
+        text-align: center;
+    }
 }

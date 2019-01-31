@@ -1,26 +1,26 @@
 import React from "react";
 import { connect } from "react-redux";
-import { searchUsers } from "./actions";
+import { searchUsers, clearStateInSearch } from "./actions";
 import { Link } from "react-router-dom";
 
 class Search extends React.Component {
     constructor() {
         super();
-        this.state = {};
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
     }
 
+    componentDidMount() {
+        this.props.dispatch(clearStateInSearch());
+    }
+
     handleChange(e) {
-        console.log("user input in search: ", e.target.value);
-        this.setState({
-            [e.target.name]: e.target.value
-        });
+        this.props.dispatch(searchUsers(e.target.value));
+        this.setState({ [e.target.name]: e.target.value });
     }
 
     handleSubmit(e) {
         e.preventDefault();
-        this.props.dispatch(searchUsers(this.state.search));
     }
 
     render() {
@@ -51,7 +51,7 @@ class Search extends React.Component {
                                         {userSearch.first} {userSearch.last}
                                     </h3>
                                     <Link to={`/user/${userSearch.id}`}>
-                                        Visit {userSearch.first}{" "}
+                                        visit {userSearch.first}
                                         {userSearch.last}'s profile
                                     </Link>
                                 </div>
@@ -64,13 +64,13 @@ class Search extends React.Component {
         return (
             <div className="content-component">
                 <h1>Search for other people</h1>
-                <form onSubmit={this.handleSubmit}>
+                <form onSubmit={this.handleSubmit} autoComplete="off">
                     <input
                         onChange={this.handleChange}
                         type="text"
                         name="search"
+                        id="search"
                     />
-                    <button>search</button>
                 </form>
                 {results}
             </div>

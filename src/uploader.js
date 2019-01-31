@@ -60,7 +60,11 @@ export default class Uploader extends React.Component {
         return (
             <div id="upload-outer-container">
                 <div id="upload-inner-container">
-                    <p onClick={this.props.hideUploader}>x</p>
+                    <img
+                        src="images/close.svg"
+                        onClick={this.props.hideUploader}
+                        id="close-img"
+                    />
                     <h1>upload an image</h1>
                     {this.state.error && (
                         <div className="error-message">
@@ -68,12 +72,14 @@ export default class Uploader extends React.Component {
                         </div>
                     )}
                     <form onSubmit={this.handleSubmit}>
-                        <input
-                            onChange={this.handleChange}
-                            name="file"
-                            type="file"
-                            accept="image/*"
-                        />
+                        <label id="custom-file-upload">
+                            choose an image<input
+                                onChange={this.handleChange}
+                                name="file"
+                                type="file"
+                                accept="image/*"
+                            />
+                        </label>
                         <button>upload</button>
                     </form>
                 </div>

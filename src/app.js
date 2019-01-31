@@ -5,6 +5,7 @@ import { Link } from "react-router-dom";
 
 import Logo from "./logo";
 import ProfilePic from "./profilepic";
+import Menu from "./menu";
 import Uploader from "./uploader";
 import Profile from "./profile";
 import OtherPersonProfile from "./otherpersonprofile";
@@ -17,10 +18,13 @@ export default class App extends React.Component {
     constructor() {
         super();
         this.state = {
-            uploaderIsVisible: false
+            uploaderIsVisible: false,
+            menuIsVisible: false
         };
         this.showUploader = this.showUploader.bind(this);
         this.hideUploader = this.hideUploader.bind(this);
+        this.showMenu = this.showMenu.bind(this);
+        this.hideMenu = this.hideMenu.bind(this);
         this.updateProfilePic = this.updateProfilePic.bind(this);
         this.setBio = this.setBio.bind(this);
     }
@@ -46,6 +50,20 @@ export default class App extends React.Component {
         });
     }
 
+    showMenu() {
+        this.setState({
+            menuIsVisible: true
+        });
+    }
+
+    hideMenu(e) {
+        if (!e.target.matches("#menu-img")) {
+            this.setState({
+                menuIsVisible: false
+            });
+        }
+    }
+
     updateProfilePic(imgUrl) {
         console.log("updateProfilePic: ", this.state.image);
         this.setState({
@@ -67,44 +85,26 @@ export default class App extends React.Component {
 
     render() {
         return (
-            <div>
+            <div onClick={this.hideMenu}>
                 <BrowserRouter>
                     <div>
                         <div id="header">
+                            <img
+                                src="images/hamburgermenu.svg"
+                                onClick={this.showMenu}
+                                id="menu-img"
+                            />
                             <Logo />
-                            <div id="nav">
-                                <Link to="/" className="navitem">
-                                    home
-                                </Link>
-                                <Link to="/friends" className="navitem">
-                                    friends
-                                </Link>
-                                <Link to="/onlineusers" className="navitem">
-                                    who's online
-                                </Link>
-                                <Link to="/search" className="navitem">
-                                    search
-                                </Link>
-                                <Link to="/chat" className="navitem">
-                                    chat
-                                </Link>
-                                <Link
-                                    to="/logout"
-                                    className="navitem"
-                                    onClick={this.logout}
-                                >
-                                    logout
-                                </Link>
-                                <ProfilePic
-                                    first={this.state.first}
-                                    last={this.state.last}
-                                    image={this.state.image}
-                                    showUploader={this.showUploader}
-                                />
-                            </div>
+                            <ProfilePic
+                                first={this.state.first}
+                                last={this.state.last}
+                                image={this.state.image}
+                                showUploader={this.showUploader}
+                            />
                         </div>
 
                         <div className="content-container">
+                            {this.state.menuIsVisible && <Menu />}
                             <Route
                                 exact
                                 path="/"

@@ -51,7 +51,7 @@ export default class Bio extends React.Component {
         if (this.props.bio) {
             elem = (
                 <div>
-                    <p>{this.props.bio}</p>
+                    <p className="pre-wrap">{this.props.bio}</p>
                     <button onClick={this.showEditor}>edit your bio</button>
                 </div>
             );

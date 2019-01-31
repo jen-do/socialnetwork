@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 import { initSocket } from "./socket";
 
@@ -24,6 +25,10 @@ class OnlineUsers extends React.Component {
                                 <h3>
                                     {userOnline.first} {userOnline.last}
                                 </h3>
+                                <Link to={`/user/${userOnline.id}`}>
+                                    visit {userOnline.first} {userOnline.last}'s
+                                    profile
+                                </Link>
                             </div>
                         );
                     })}

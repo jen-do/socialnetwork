@@ -1,5 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
+import { Link } from "react-router-dom";
 import {
     getFriendsAndWannabes,
     acceptFriendRequest,
@@ -41,6 +42,10 @@ class Friends extends React.Component {
                                     <h3>
                                         {friend.first} {friend.last}
                                     </h3>
+                                    <Link to={`/user/${friend.id}`}>
+                                        visit {friend.first} {friend.last}'s
+                                        profile
+                                    </Link>
                                     <button
                                         onClick={() =>
                                             this.props.dispatch(
@@ -54,7 +59,8 @@ class Friends extends React.Component {
                             );
                         })}
                 </div>
-                <h1>These people want to be your friends</h1>
+                <hr />
+                <h1>Friend Requests</h1>
                 <div id="wannabe-list">
                     {this.props.wannabes &&
                         this.props.wannabes.map(wannabe => {
@@ -70,10 +76,13 @@ class Friends extends React.Component {
                                             this.redirect(wannabe.id)
                                         }
                                     />
-
                                     <h3>
                                         {wannabe.first} {wannabe.last}
                                     </h3>
+                                    <Link to={`/user/${wannabe.id}`}>
+                                        visit {wannabe.first} {wannabe.last}'s
+                                        profile
+                                    </Link>
                                     <button
                                         onClick={() =>
                                             this.props.dispatch(

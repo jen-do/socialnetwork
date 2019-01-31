@@ -48,23 +48,26 @@ class Chat extends React.Component {
                             .sort((a, b) => a["id"] - b["id"])
                             .map((message, index) => {
                                 return (
-                                    <div key={index} className="chat-message">
+                                    <div
+                                        key={index}
+                                        className="chat-message-container"
+                                    >
                                         <img
-                                            className="friends-pic"
+                                            id="profile-pic"
                                             src={
                                                 message.image ||
                                                 "/images/placeholder.png"
                                             }
                                         />
-                                        <div className="chat-user-message">
+                                        <div className="chat-message-text">
                                             <p>
                                                 <strong>
                                                     {message.first}{" "}
-                                                    {message.last} wrote:
+                                                    {message.last} wrote{" "}
+                                                    {message.createdAt}:
                                                 </strong>
                                             </p>
                                             <p>"{message.message}"</p>
-                                            <p>{message.createdAt}</p>
                                         </div>
                                     </div>
                                 );

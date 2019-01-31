@@ -27,10 +27,10 @@ export default class OtherPersonProfile extends React.Component {
 
     render() {
         return (
-            <div className="content-component">
+            <div id="profile">
                 <h1 className="centered-text">Other Profiles</h1>
                 <img
-                    id="opp-pic"
+                    id="profile-pic"
                     src={this.state.image || "/images/placeholder.png"}
                 />
                 <h3>

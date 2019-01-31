@@ -232,6 +232,7 @@ app.get("/user/:id/profile", (req, res) => {
 app.get("/search/:username", (req, res) => {
     db.searchUsers(req.params.username, req.session.id)
         .then(results => {
+            console.log("results in search", results);
             if (!results.length > 0) {
                 res.json({
                     results: results,
