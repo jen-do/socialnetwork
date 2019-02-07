@@ -25,7 +25,6 @@ class Search extends React.Component {
 
     render() {
         let results;
-
         if (this.props.noResults) {
             results = (
                 <div id="results">

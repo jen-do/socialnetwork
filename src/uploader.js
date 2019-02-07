@@ -11,12 +11,9 @@ export default class Uploader extends React.Component {
 
     handleChange(e) {
         // console.log("e.target.files[0] in uploader", e.target.files[0]);
-        this.setState(
-            {
-                [e.target.name]: e.target.files[0]
-            },
-            () => console.log("this.state in uploader", this.state)
-        );
+        this.setState({
+            [e.target.name]: e.target.files[0]
+        });
     }
 
     handleSubmit(e) {

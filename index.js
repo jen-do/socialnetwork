@@ -34,7 +34,7 @@ io.use(function(socket, next) {
 const bodyparser = require("body-parser");
 app.use(bodyparser.json());
 
-// boilerplate for file upload
+// file upload
 var diskStorage = multer.diskStorage({
     destination: function(req, file, callback) {
         callback(null, __dirname + "/uploads");
@@ -45,14 +45,12 @@ var diskStorage = multer.diskStorage({
         });
     }
 });
-
 var uploader = multer({
     storage: diskStorage,
     limits: {
         fileSize: 2097152
     }
 });
-// end boilerplate file upload
 
 app.use(csurf());
 

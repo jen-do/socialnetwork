@@ -1,5 +1,6 @@
 DROP TABLE IF EXISTS chat;
 
+
 CREATE TABLE chat (
     id SERIAL PRIMARY KEY,
     message TEXT NOT NULL,

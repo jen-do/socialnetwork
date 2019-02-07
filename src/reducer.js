@@ -4,6 +4,7 @@ export default function reducer(state = {}, action) {
 
         return { ...state, list };
     }
+
     if (action.type == "ACCEPT") {
         state = {
             ...state,
@@ -21,6 +22,7 @@ export default function reducer(state = {}, action) {
                 })
         };
     }
+
     if (action.type == "END") {
         state = {
             ...state,
@@ -41,10 +43,12 @@ export default function reducer(state = {}, action) {
                 })
         };
     }
+
     if (action.type == "ONLINE_USERS_LIST") {
         var listOfUsersOnline = action.onlineUsers;
         return { ...state, listOfUsersOnline };
     }
+
     if (action.type == "USER_WHO_JOINED") {
         var newUser = action.newUser;
         return (state = {
@@ -54,6 +58,7 @@ export default function reducer(state = {}, action) {
                 state.listOfUsersOnline.concat(newUser)
         });
     }
+
     if (action.type == "USER_WHO_LEFT") {
         return (state = {
             ...state,
@@ -64,12 +69,14 @@ export default function reducer(state = {}, action) {
                 )
         });
     }
+
     if (action.type == "CHAT_MESSAGES") {
         return {
             ...state,
             chatMessages: action.chatMessages
         };
     }
+
     if (action.type == "NEW_MESSAGE") {
         return {
             ...state,
@@ -78,6 +85,7 @@ export default function reducer(state = {}, action) {
                 state.chatMessages.concat(action.newMessage)
         };
     }
+
     if (action.type == "USER_SEARCH") {
         var resultsFromUserSearch = action.users;
         var noResults = action.noResults;

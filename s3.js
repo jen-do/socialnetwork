@@ -42,6 +42,7 @@ exports.upload = function(req, res, next) {
     });
 };
 
+// image deletion
 exports.delete = function(req, res, next) {
     client
         .del(req.body.amazonString)

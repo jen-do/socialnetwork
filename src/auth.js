@@ -14,13 +14,9 @@ function wrapAuth(Component, url) {
         }
 
         handleChange(e) {
-            console.log("handlechange running!", e.target.name);
-            this.setState(
-                {
-                    [e.target.name]: e.target.value
-                },
-                () => console.log("this state in handleChange: ", this.state)
-            );
+            this.setState({
+                [e.target.name]: e.target.value
+            });
         }
 
         handleSubmit(e) {

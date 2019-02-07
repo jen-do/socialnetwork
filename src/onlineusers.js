@@ -7,6 +7,7 @@ class OnlineUsers extends React.Component {
     constructor() {
         super();
     }
+
     render() {
         return (
             <div className="opp-container">

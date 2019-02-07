@@ -14,12 +14,9 @@ export default class Bio extends React.Component {
     }
 
     handleChange(e) {
-        this.setState(
-            {
-                [e.target.name]: e.target.value
-            },
-            () => console.log("this.state in bio", this.state)
-        );
+        this.setState({
+            [e.target.name]: e.target.value
+        });
     }
 
     async handleSubmit(e) {

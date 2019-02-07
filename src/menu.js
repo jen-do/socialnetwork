@@ -6,11 +6,9 @@ export default class Menu extends React.Component {
         super(props);
         this.logout = this.logout.bind(this);
     }
-
     logout() {
         this.props.history.push("/logout");
     }
-
     render() {
         return (
             <div id="nav">

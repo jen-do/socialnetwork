@@ -7,7 +7,7 @@ export default function ProfilePic(props) {
                 id="profile-pic"
                 onClick={props.showUploader}
                 src={props.image || "/images/placeholder.png"}
-                title="edit your profile picture"
+                title="edit profile picture"
                 alt={props.first}
             />
         </div>

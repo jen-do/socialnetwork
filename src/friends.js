@@ -16,7 +16,6 @@ class Friends extends React.Component {
     componentDidMount() {
         this.props.dispatch(getFriendsAndWannabes());
     }
-
     redirect(id) {
         this.props.history.push("/user/" + id);
     }

@@ -24,7 +24,6 @@ export default class OtherPersonProfile extends React.Component {
                 this.props.history.push("/");
             });
     }
-
     render() {
         return (
             <div id="profile">

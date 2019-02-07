@@ -12,18 +12,18 @@ exports.register = function(first, last, email, hash) {
         )
         .then(results => {
             return results.rows;
-        })
-        .catch(err => {
-            console.log("error in db inserting new user: ", err);
         });
+    // .catch(err => {
+    //     console.log("error in db inserting new user: ", err);
+    // });
 };
 
 exports.login = function(email) {
     return db
         .query(
             `
-        SELECT * FROM users
-        WHERE email = $1
+            SELECT * FROM users
+            WHERE email = $1
         `,
             [email]
         )
@@ -36,7 +36,7 @@ exports.getUserInfo = function(id) {
     return db
         .query(
             `SELECT * FROM users
-        WHERE id = $1`,
+            WHERE id = $1`,
             [id]
         )
         .then(results => {
@@ -76,7 +76,7 @@ exports.getOtherProfiles = function(id) {
     return db
         .query(
             `SELECT * FROM users
-        WHERE id = $1`,
+            WHERE id = $1`,
             [id]
         )
         .then(results => {
@@ -178,9 +178,9 @@ exports.getUserWhoJoined = function(id) {
     return db
         .query(
             `
-        SELECT id, first, last, image
-        FROM users
-        WHERE id = $1`,
+            SELECT id, first, last, image
+            FROM users
+            WHERE id = $1`,
             [id]
         )
         .then(results => {
@@ -192,12 +192,12 @@ exports.getChatMessages = function() {
     return db
         .query(
             `
-        SELECT chat.id, chat.message, chat.created_at, users.first, users.last, users.image
-        FROM chat
-        LEFT JOIN users
-        ON chat.sender = users.id
-        ORDER BY chat.id DESC
-        LIMIT 10`
+            SELECT chat.id, chat.message, chat.created_at, users.first, users.last, users.image
+            FROM chat
+            LEFT JOIN users
+            ON chat.sender = users.id
+            ORDER BY chat.id DESC
+            LIMIT 10`
         )
         .then(results => {
             return results.rows;
@@ -208,9 +208,9 @@ exports.addNewMessage = function(message, sender) {
     return db
         .query(
             `
-        INSERT INTO chat (message, sender)
-        VALUES ($1, $2)
-        RETURNING id, message, sender, created_at
+            INSERT INTO chat (message, sender)
+            VALUES ($1, $2)
+            RETURNING id, message, sender, created_at
         `,
             [message || null, sender || null]
         )
@@ -223,9 +223,9 @@ exports.getSenderInfo = function(id) {
     return db
         .query(
             `
-        SELECT first, last, image
-        FROM users
-        WHERE id = $1
+            SELECT first, last, image
+            FROM users
+            WHERE id = $1
         `,
             [id]
         )

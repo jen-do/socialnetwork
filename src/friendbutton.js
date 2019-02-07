@@ -8,7 +8,6 @@ export default class FriendButton extends React.Component {
         this.makeFriendRequest = this.makeFriendRequest.bind(this);
         this.acceptFriendRequest = this.acceptFriendRequest.bind(this);
         this.endFriendship = this.endFriendship.bind(this);
-        // console.log("this.props in FriendButton", this.props);
     }
 
     componentDidMount() {

@@ -13,7 +13,6 @@ const store = createStore(
     reducer,
     composeWithDevTools(applyMiddleware(reduxPromise))
 );
-
 let component;
 
 // rendering either Welcome (login or registration) or logged-in section contained in App

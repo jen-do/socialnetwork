@@ -1,5 +1,6 @@
 DROP TABLE IF EXISTS friendships;
 
+
 CREATE TABLE friendships (
     id SERIAL PRIMARY KEY,
     receiver INTEGER NOT NULL REFERENCES users(id),

@@ -1,5 +1,7 @@
 import axios from "./axios";
 
+// frienship requests
+
 export function getFriendsAndWannabes() {
     return axios.get("/listfriendsandwannabes").then(({ data }) => {
         return {
@@ -28,6 +30,8 @@ export async function endFriendship(id) {
     };
 }
 
+// who's online now
+
 export function showListOfOnlineUsers(listOfUsersOnline) {
     return {
         type: "ONLINE_USERS_LIST",
@@ -49,6 +53,8 @@ export function hideUserWhoLeft(userWhoLeft) {
     };
 }
 
+// chat
+
 export function getChatMessages(chatMessages) {
     return {
         type: "CHAT_MESSAGES",
@@ -62,6 +68,8 @@ export function addNewMessage(newMessage) {
         newMessage: newMessage
     };
 }
+
+// search
 
 export async function searchUsers(username) {
     try {

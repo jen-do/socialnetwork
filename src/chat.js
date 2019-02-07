@@ -8,28 +8,15 @@ class Chat extends React.Component {
     constructor() {
         super();
         this.sendMessage = this.sendMessage.bind(this);
-        // this.updateTime = this.updateTime.bind(this);
     }
 
     sendMessage(e) {
         let socket = initSocket();
         if (e.which === 13) {
-            // console.log("moment", moment().get("second"));
             socket.emit("newMessage", e.target.value);
             e.target.value = "";
         }
     }
-
-    // componentDidMount() {
-    //     setInterval(() => this.updateTime(), 60000);
-    // }
-    //
-    // updateTime() {
-    //     this.props.chatMessages.map(message => {
-    //         moment(message.createdAt).fromNow();
-    //         return message;
-    //     });
-    // }
 
     componentDidUpdate() {
         console.log("this.elem:", this.elem);

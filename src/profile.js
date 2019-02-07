@@ -18,7 +18,6 @@ export default class Profile extends React.Component {
                 var amazonUrl = this.props.image;
                 var lastIndex = amazonUrl.lastIndexOf("/");
                 var amazonString = amazonUrl.slice(lastIndex + 1);
-                // console.log("amazonString", amazonString);
             }
 
             const deleteImage = await axios.post("/deleteimage", {

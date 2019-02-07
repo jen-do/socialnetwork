@@ -15,12 +15,12 @@ export function initSocket(store) {
         socket = io.connect();
 
         socket.on("onlineUsers", listofOnlineUsers => {
-            console.log("listofOnlineUsers", listofOnlineUsers);
+            // console.log("listofOnlineUsers", listofOnlineUsers);
             store.dispatch(showListOfOnlineUsers(listofOnlineUsers));
         });
 
         socket.on("userJoined", userWhoJoined => {
-            console.log("showUserWhoJoined", userWhoJoined);
+            // console.log("showUserWhoJoined", userWhoJoined);
             store.dispatch(showUserWhoJoined(userWhoJoined));
         });
 
@@ -29,12 +29,12 @@ export function initSocket(store) {
         });
 
         socket.on("getChatMessages", chatMessages => {
-            console.log("chatMessages: ", chatMessages);
+            // console.log("chatMessages: ", chatMessages);
             store.dispatch(getChatMessages(chatMessages));
         });
 
         socket.on("addNewMessage", newMessage => {
-            console.log("newMessage in socket.js:", newMessage);
+            // console.log("newMessage in socket.js:", newMessage);
             store.dispatch(addNewMessage(newMessage));
         });
     }

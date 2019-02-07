@@ -30,12 +30,9 @@ export default class App extends React.Component {
     }
 
     componentDidMount() {
-        axios.get("/user").then(
-            ({ data }) => {
-                this.setState(data);
-            },
-            () => console.log("data", this.state)
-        );
+        axios.get("/user").then(({ data }) => {
+            this.setState(data);
+        });
     }
 
     showUploader() {
