@@ -320,7 +320,7 @@ button {
     }
     .other-users {
         width: 100%;
-        margin: 20px 0;
+        /* margin: 20px 0; */
     }
     .chat-message-container {
         padding: 1%;

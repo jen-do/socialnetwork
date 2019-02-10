@@ -6,7 +6,8 @@ import { Registration, Login } from "./auth";
 export default function Welcome() {
     return (
         <div className="welcome-container">
-            <h1>Welcome!</h1>
+            <img src="/images/logo_blue.svg" alt="logo" />
+            <h1>Welcome to CONNECT!</h1>
             <HashRouter>
                 <div>
                     <Route exact path="/" component={Registration} />

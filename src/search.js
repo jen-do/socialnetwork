@@ -50,7 +50,7 @@ class Search extends React.Component {
                                         {userSearch.first} {userSearch.last}
                                     </h3>
                                     <Link to={`/user/${userSearch.id}`}>
-                                        visit {userSearch.first}
+                                        visit {userSearch.first}{" "}
                                         {userSearch.last}'s profile
                                     </Link>
                                 </div>
@@ -62,7 +62,7 @@ class Search extends React.Component {
 
         return (
             <div className="content-component">
-                <h1>Search for other people</h1>
+                <h1>Search other people</h1>
                 <form onSubmit={this.handleSubmit} autoComplete="off">
                     <input
                         onChange={this.handleChange}
