@@ -32,7 +32,7 @@ You can also check out who's online now. For this feature I used socket.io and R
 
 It's possible to send and accept friend requests or to end an existing friendship. A list shows all friends and pending friendship requests. Again you can see the interaction on a split screen showing two users logged in.
 
-![friendship request](https://github.com/jen-do/socialnetwork/raw/master/public/images/friendshiprequests.gif)
+![friendship request](https://github.com/jen-do/socialnetwork/raw/master/public/images/friendrequests.gif)
 
 People can also connect in a public chat room. This feature was built using socket.io; the new message pops up instantaneously. I made the website responsive, here you can see how it looks on mobile devices.
 
